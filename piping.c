@@ -78,7 +78,7 @@ void	split_pipe_orders_loop(t_arr *arr, char ***order, size_t i, size_t hold)
 				mini_exit(order, arr);
 			}
 			if (!loop_arg(arr, order[count_i], hold, i))
-				mini_exit(order, arr);
+				mini_exit(order, arr); // potential memory leaks, probably we need to free all partially allocated memory before we go ahead with mini_exit?
 			hold = i + 1;
 			count_i++;
 		}
@@ -143,6 +143,7 @@ void	ex_pipe_order(char ***order, t_arr *arr)
 				dup2(fd, STDIN_FILENO);
 			close(pipefd[0]);
 			close(pipefd[1]);
+			//Probably we need to check if the command exists and is executable here?
 			execve(order[i][0], order[i], arr->envp);
 			write(2, "Error, execve failed in ex_pipe_order\n", 39);
 			mini_exit(order, arr);
@@ -165,3 +166,5 @@ void	do_pipe(t_arr *arr)
 		free_order(order);
 	}
 }
+//multiple commands check?
+//empty commands check?
