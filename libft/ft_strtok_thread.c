@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 15:14:59 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/08/11 15:49:44 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/04 19:20:22 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 /// @return the next token
 char	*ft_strtok_thread(char *str, const char *delim, char **saveptr)
 {
-	char *start;
+	char	*start;
 
 	if (str)
 		*saveptr = str;

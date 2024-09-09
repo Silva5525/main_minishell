@@ -6,17 +6,17 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/13 15:05:15 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/07/17 16:41:38 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/08 18:53:20 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void b_exit(t_arr *arr)
+/// @brief exits the shell with 0 and frees the tokens. no special.
+/// @param arr all information for the shell
+void	b_exit(t_arr *arr)
 {
 	free_tokens(arr);
 	write(1, "exit\n", 5);
-	/// the exit code if something more then exit is writen should be something
-	/// like: The terminal process "/usr/bin/bash" terminated with exit code: 2.
 	exit(0);
 }

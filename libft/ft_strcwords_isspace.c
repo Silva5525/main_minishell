@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/11 14:31:03 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/08/11 15:39:11 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/04 19:01:16 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 ssize_t	ft_strcwords_isspace(char *str)
 {
 	ssize_t		i;
-	bool	in_word;
-	
+	bool		in_word;
+
 	i = 0;
 	in_word = false;
 	while (*str)

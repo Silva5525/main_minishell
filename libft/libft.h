@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 14:13:48 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/08/11 15:39:59 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/06 18:20:05 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,15 @@ t_list	*ft_lstget(t_list *lst, int index);
 ssize_t	ft_strcwords(char *str, char delimeter);
 ssize_t	ft_strcwords_isspace(char *str);
 ssize_t	ft_ato_ssize_t(const char *str);
-void 	ft_fill(char **tab, t_xy size, t_xy begin);
+void	ft_fill(char **tab, t_xy size, t_xy begin);
 int		ft_unsetenv(const char *name, char **envp);
 int		ft_setenv(const char *str, const char *v, char **envp);
 ssize_t	ft_write(int fd, const void *buf, size_t count);
 char	*ft_strtok_thread(char *str, const char *delim, char **saveptr);
 char	*ft_strtok(char *str, const char *delim);
+char	*ft_strstr(const char *haystack, const char *needle);
+char	*ft_strcat(char *dst, const char *src);
+char	*ft_strjoin_multiple(char *hold, char *next);
+
 
 #endif

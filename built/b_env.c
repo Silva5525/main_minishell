@@ -6,12 +6,15 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:08:46 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/07/18 18:40:11 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/08 18:52:56 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+/// @brief Outputs the environment array.
+/// Prints the environment array line by line.
+/// @param arr all information about the shell
 void	b_env(t_arr *arr)
 {
 	size_t	i;

@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:52:57 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/08/13 16:42:17 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/09 16:04:51 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ typedef struct s_arr
 	size_t	max_size;
 	int		in_fd;
 	int		out_fd;
-	int		stat; // needed?
-	int		sig; // needed?
+	int		stat;
+	// int		sig; // needed?
 	bool	first_time;
 }	t_arr;
 
@@ -85,6 +85,8 @@ void	b_export(t_arr *arr);
 void	b_unset(t_arr *arr);
 void	b_env(t_arr *arr);
 void	b_exit(t_arr *arr);
+char	**ft_arr_setenv(const char *str, const char *v
+			, char **envp, bool first_time);
 
 /// @param built/a_builtins.c
 
@@ -93,15 +95,21 @@ char	**ft_arr_setenv(const char *str, const char *v, char **envp
 
 /// ########################################## @brief Sources ################
 
+/// @param tokenize.c
+
+char	**split_str_to_arg(char *str);
+
 /// @param lexer.c
 
-t_arr	*to_ken_producer(const char *read);
-void	free_tokens(t_arr *arr);
-char	**split_str_to_arg(char *str);
+void	to_ken_producer(const char *read, t_arr *arr);
 
 /// @param expand.c
 
-char	*expanding_env(char *read, char **envp);
+char	*expanding_env(char *read, char **envp, t_arr *arr);
+
+/// @param free_tokens.c
+
+void	free_tokens(t_arr *arr);
 
 /// @param redir.c
 
@@ -110,5 +118,25 @@ void	redir(t_arr *arr);
 /// @param piping.c
 
 void	do_pipe(t_arr *arr);
+
+/// @param open_quotes.c
+
+char	*unclosed_quotes(char *line);
+bool	has_open_quotes(const char *line);
+
+/// @param mini_helper.c
+
+bool	pipe_search(t_arr *arr);
+void	envp_copy(t_arr *arr, char **envp, size_t i);
+void	alloc_envp(t_arr *arr, char **envp);
+void	read_signal(int sig);
+
+/// @param manage_token.c
+
+char	*doller_question(char *str, int stat);
+void	catch_token(t_arr *arr, t_to *ken);
+t_arr	*flexible_arr(void);
+t_to	*list_token(char **val, int typ);
+void	redirections(const char **read, char *buf);
 
 #endif

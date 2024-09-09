@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:02:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/08/20 14:20:17 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/09 16:16:17 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,5 +166,3 @@ void	do_pipe(t_arr *arr)
 		free_order(order);
 	}
 }
-//multiple commands check?
-//empty commands check?

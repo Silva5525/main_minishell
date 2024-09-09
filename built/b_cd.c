@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:07:05 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/08/11 16:54:00 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/08 18:52:20 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,13 @@ static bool	ft_pwd(t_arr *arr)
 
 	pwd = getcwd(NULL, 0);
 	oldpwd = getenv("PWD");
-	
 	if (!pwd)
 		return (write(2, "Error, getcwd failed in set_pwd\n", 32), false);
 	if (!oldpwd)
 		return (free(pwd),
 			write(2, "Error, getenv failed in set_pwd\n", 32), false);
 	new_envp = ft_arr_setenv("OLDPWD", oldpwd, arr->envp, arr->first_time);
-	if (!new_envp) 
+	if (!new_envp)
 		return (free(pwd),
 			write(2, "Error, setenv failed in set_pwd\n", 33), false);
 	arr->envp = new_envp;
@@ -63,29 +62,16 @@ static bool	ft_cd(char **argv)
 	return (true);
 }
 
-void b_cd(t_arr *arr)
+/// @brief helper function for b_cd it splits the arguments and executes
+/// the cd command.
+/// @param argv array of arguments
+/// @param argc array size
+/// @param arr holds all data
+static void	split_b_cd(char **argv, size_t argc, t_arr *arr)
 {
-	char		**argv;
-	char 		*new_direktory;
-	size_t		argc;
-	size_t		i;
+	char		*new_direktory;
 
-	argc = arr->size;
-	i = 0;
-	argv = (char **)malloc((argc + 1) * sizeof(char *));
-	if (!argv)
-	{
-		write(2, "Error, malloc failed in b_cd\n", 29);
-		free_tokens(arr);
-		return;
-	}
-	while (i < argc)
-	{
-		argv[i] = arr->ken[i]->str[0];
-		i++;
-	}
 	argv[argc] = NULL;
-
 	if (!ft_cd(argv))
 		write(2, "Error, ft_cd in b_cd failed\n", 28);
 	else if (!ft_pwd(arr))
@@ -102,5 +88,33 @@ void b_cd(t_arr *arr)
 		else
 			write(2, "Error, getcwd failed in b_cd\n", 30);
 	}
+}
+
+/// @brief executes the cd command and changes the current working directory
+/// to the directory specified in the argument. If no argument is given, it
+/// changes the current working directory to the value of the HOME environment
+/// variable.
+/// @param arr struct that holds all data
+void	b_cd(t_arr *arr)
+{
+	char		**argv;
+	size_t		argc;
+	size_t		i;
+
+	argc = arr->size;
+	i = 0;
+	argv = (char **)malloc((argc + 1) * sizeof(char *));
+	if (!argv)
+	{
+		write(2, "Error, malloc failed in b_cd\n", 29);
+		free_tokens(arr);
+		return ;
+	}
+	while (i < argc)
+	{
+		argv[i] = arr->ken[i]->str[0];
+		i++;
+	}
+	split_b_cd(argv, argc, arr);
 	free(argv);
 }

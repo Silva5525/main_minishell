@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:42:54 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/07/20 11:31:52 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/04 15:56:54 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,9 @@ static char	*doller_search(char *str,char *hold, char **envp, char *out)
 	char	*search;
 	char	*env;
 	char	safe;
-	
-	while ((doller = ft_strchr(str, '$')))
+
+	doller = ft_strchr(str, '$');
+	while (doller)
 	{
 		*doller = '\0';
 		out = ft_strjoin(hold, str);
@@ -66,12 +67,13 @@ static char	*doller_search(char *str,char *hold, char **envp, char *out)
 		if (env)
 		{
 			out = ft_strjoin(hold, env);
+			free(hold);
 			if (!out)
 				return (NULL);
-			free(hold);
 			hold = out;
 		}
 		str = search;
+		doller = ft_strchr(str, '$');
 	}
 	return (hold);
 }
@@ -82,11 +84,13 @@ static char	*doller_search(char *str,char *hold, char **envp, char *out)
 /// @param read the string to expand
 /// @param envp environment array
 /// @return the expanded string out, or NULL if an error occurred
-char	*expanding_env(char *read, char **envp)
+char	*expanding_env(char *read, char **envp, t_arr *arr)
 {
 	char	*hold;
 	char	*out;
+	char	*out2;
 	char	*str;
+	char	*doller_quest;
 
 	if (!read)
 		return (NULL);
@@ -94,12 +98,19 @@ char	*expanding_env(char *read, char **envp)
 	hold = ft_strdup("");
 	if (!hold)
 		return (NULL);
+	doller_quest = ft_strstr(str, "$?");
+	if (doller_quest)
+	{
+		out = doller_question(str, arr->stat);
+		free(hold);
+		return (out);
+	}
 	out = doller_search(str, hold, envp, NULL);
 	if (!out)
 		return (free(hold), NULL);
-	out = ft_strjoin(hold, str);
-	free(hold);
-	if (!out)
+	out2 = ft_strjoin(out, str);
+	free(out);
+	if (!out2)
 		return (NULL);
-	return (out);
+	return (out2);
 }

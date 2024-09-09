@@ -6,64 +6,11 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:26:13 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/08/12 16:51:04 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/08 18:29:06 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-/// @brief own implementation of setenv from stdlib.c
-/// Checks if *str is valid then searches for the *v variable in the envp array.
-/// If the variable is found, it changes the value of the variable.
-/// If the variable is not found, it adds the variable to the array.
-/// @param str the name of the environment variable to set.
-/// @param v value of the environment variable to set.
-/// @param envp the enviroment array.
-/// @param first_time if true, the function will not free the old envp.
-/// @return the new envp array or NULL if an error occurred.
-char	**ft_arr_setenv(const char *str, const char *v
-			, char **envp, bool first_time)
-{
-	char	*new;
-	char	*hold;
-	int		i;
-	int		len;
-
-	if (!str || !v || ft_strchr(str, '=') != NULL || *str == '\0')
-		return (NULL);
-	len = ft_strlen(str);
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], str, len) == 0 && envp[i][len] == '=')
-		{
-			if (!first_time)
-				free(envp[i]);
-			break ;
-		}
-		i++;
-	}
-	hold = ft_strjoin(str, "=");
-	if (!hold)
-		return (NULL);
-	new = ft_strjoin(hold, v);
-	free(hold);
-	if (!new)
-		return (NULL);
-	if (!envp[i])
-	{
-		if (!first_time)
-		{
-			envp = ft_realloc(envp, sizeof(char *)
-					* (i + 1), sizeof(char *) * (i + 2));
-			if (!envp)
-				return (free(new), NULL);
-		}
-		envp[i + 1] = NULL;
-	}
-	envp[i] = new;
-	return (envp);
-}
 
 /// @brief executes the command
 /// @param arr holds all data
@@ -93,25 +40,22 @@ void	ex_order(t_arr *arr)
 		waitpid(pid, &stat, 0);
 		if (WIFEXITED(stat))
 			arr->stat = WEXITSTATUS(stat);
-		else if (WIFSIGNALED(stat))
-			arr->sig = WTERMSIG(stat);
 	}
 }
 
 void	builtin(t_arr *arr)
 {
 	size_t	i;
-	t_b		built[] =
-	{
-		{"echo", b_echo},
-		{"cd", b_cd},
-		{"pwd", b_pwd},
-		{"export", b_export},
-		{"unset", b_unset},
-		{"env", b_env},
-		{"exit", b_exit},
-		{NULL, NULL}
-	};
+	t_b		built[8];
+
+	built[0] = (t_b){"echo", b_echo};
+	built[1] = (t_b){"cd", b_cd};
+	built[2] = (t_b){"pwd", b_pwd};
+	built[3] = (t_b){"export", b_export};
+	built[4] = (t_b){"unset", b_unset};
+	built[5] = (t_b){"env", b_env};
+	built[6] = (t_b){"exit", b_exit};
+	built[7] = (t_b){NULL, NULL};
 
 	i = 0;
 	while (built[i].name)

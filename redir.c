@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 14:58:42 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/08/13 16:57:27 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/08 19:31:14 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ void	redir(t_arr *arr)
 			out_redir(arr->ken[i + 1]->str[0], true, arr);
 		else if (arr->ken[i]->typ == 'H')
 			mini_heredoc(arr->ken[i + 1]->str[0], arr);
-		// maybe ; and && and || here... 
 		i++;
 	}
 }
