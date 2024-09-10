@@ -1,11 +1,0 @@
-"Hello, World!" > output_test.txt
-[?2004h/home/mahakala/Documents/42Github/minishell minishell$ cat output_test.txt | grep "Hello, World!" && echo "Output redirection works"
-[?2004l[?2004h/home/mahakala/Documents/42Github/minishell minishell$ echo "Another line" >> output_test.txt
-[?2004l"Another line" A output_test.txt
-[?2004h/home/mahakala/Documents/42Github/minishell minishell$ echo "Another line" >> output_test.txt
-[?2004l"Another line" A output_test.txt
-[?2004h/home/mahakala/Documents/42Github/minishell minishell$ 
-[?2004lAnother line
-"Another line" A output_test.txt
-[?2004h/home/mahakala/Documents/42Github/minishell minishell$ exit
-[?2004lexit
