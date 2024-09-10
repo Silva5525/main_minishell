@@ -6,11 +6,31 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 19:02:33 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/09 16:15:42 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/10 18:51:12 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/// @brief concatenates the strings before and after "$?" with the status
+/// into the allocated out string.
+/// @param out filal output string.
+/// @param first string before "$?".
+/// @param last string after "$?".
+/// @param stat_str stat of the last command.
+/// @return out or NULL if the allocation fails.
+static char	*split_doller_question(char *out, char *first,
+				char *last, char *stat_str)
+{
+	if (!out)
+		return (free_doller_question(
+				first, last, stat_str, true), NULL);
+	ft_strcpy(out, first);
+	ft_strcat(out, stat_str);
+	ft_strcat(out, last);
+	free_doller_question(first, last, stat_str, false);
+	return (out);
+}
 
 /// @brief if the string contains "$?" it will be replaced with the status
 /// of the last command. The new string will be saved in a new allocated
@@ -31,20 +51,20 @@ char	*doller_question(char *str, int stat)
 	if (pos)
 	{
 		first = ft_strndup(str, pos - str);
+		if (!first)
+			return (free_doller_question(NULL, NULL, NULL, true), NULL);
 		last = ft_strdup(pos + 2);
+		if (!last)
+			return (free_doller_question(first, NULL, NULL, true), NULL);
 		stat_str = ft_itoa(stat);
-
+		if (!stat_str)
+			return (free_doller_question(first, last, NULL, true), NULL);
 		out = malloc(ft_strlen(first) + ft_strlen(stat_str)
 				+ ft_strlen(last) + 1);
-		ft_strcpy(out, first);
-		ft_strcat(out, stat_str);
-		ft_strcat(out, last);
-		free(first);
-		free(last);
-		free(stat_str);
+		out = split_doller_question(out, first, last, stat_str);
 	}
 	else
-		out = ft_strdup(str);
+		return (ft_strdup(str));
 	return (out);
 }
 

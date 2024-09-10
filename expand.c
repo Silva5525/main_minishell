@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:42:54 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/04 15:56:54 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/10 17:31:07 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 /// @param envp the environment array
 /// @param str string to search
 /// @return variable value or NULL if the variable is not found
-static char *ft_getenv_val(char **envp, char *str)
+static char	*ft_getenv_val(char **envp, char *str)
 {
 	size_t		i;
 	size_t		j;
@@ -33,9 +33,44 @@ static char *ft_getenv_val(char **envp, char *str)
 	return (NULL);
 }
 
+/// @brief Joins the current value in hold with the env value
+/// if env exitst. hold string is updated with the new cocatenated
+/// string.
+/// @param hold pointer to the string that holds the result so far.
+/// It will be updated with the concantenate result if env is found.
+/// @param env environment variable value to append to hold.
+/// @param out pointer to the result string after concatenation.
+static void	if_env(char **hold, char *env, char **out)
+{
+	if (env)
+	{
+		*out = ft_strjoin(*hold, env);
+		free(*hold);
+		if (!*out)
+			return ;
+		*hold = *out;
+	}
+}
+
+/// @brief searches pointer search till it reaches a character that is not
+/// alphanumeric or an underscore which will be replaceced with a null
+/// terminator to extract the variable name for the environment lookup.
+/// The replaced character is saved in safe.
+/// @param search pointer to current search position, get updated to next
+/// non-alphanumeric character.
+/// @param safe pointer to store character that was replaced by terminator.
+/// so that it can be restored after the variable name is extracted.
+static void	while_search(char **search, char *safe)
+{
+	while ((**search && ft_isalnum(**search)) || **search == '_')
+		(*search)++;
+	*safe = **search;
+	**search = '\0';
+}
+
 /// @brief searches for $ in the string and replaces the variable with its value
-/// if the variable is not found, the variable will be replaced with an empty string
-/// and the search will continue.
+/// if the variable is not found, the variable will be replaced with an empty 
+/// string and the search will continue.
 /// @param str string to search
 /// @param hold hold the string
 /// @param envp environment array
@@ -58,20 +93,10 @@ static char	*doller_search(char *str,char *hold, char **envp, char *out)
 			return (NULL);
 		hold = out;
 		search = doller + 1;
-		while ((*search && ft_isalnum(*search)) || *search == '_')
-			search++;
-		safe = *search;
-		*search = '\0';
+		while_search(&search, &safe);
 		env = ft_getenv_val(envp, doller + 1);
 		*search = safe;
-		if (env)
-		{
-			out = ft_strjoin(hold, env);
-			free(hold);
-			if (!out)
-				return (NULL);
-			hold = out;
-		}
+		if_env(&hold, env, &out);
 		str = search;
 		doller = ft_strchr(str, '$');
 	}
@@ -100,11 +125,7 @@ char	*expanding_env(char *read, char **envp, t_arr *arr)
 		return (NULL);
 	doller_quest = ft_strstr(str, "$?");
 	if (doller_quest)
-	{
-		out = doller_question(str, arr->stat);
-		free(hold);
-		return (out);
-	}
+		return (free(hold), doller_question(str, arr->stat));
 	out = doller_search(str, hold, envp, NULL);
 	if (!out)
 		return (free(hold), NULL);

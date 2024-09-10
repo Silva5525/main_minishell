@@ -6,13 +6,14 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:52:57 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/09 16:04:51 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/10 18:52:41 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <errno.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -110,6 +111,8 @@ char	*expanding_env(char *read, char **envp, t_arr *arr);
 /// @param free_tokens.c
 
 void	free_tokens(t_arr *arr);
+void	free_order(char ***order);
+void	free_doller_question(char *first, char *last, char *stat_str, bool er);
 
 /// @param redir.c
 
@@ -118,6 +121,11 @@ void	redir(t_arr *arr);
 /// @param piping.c
 
 void	do_pipe(t_arr *arr);
+void	mini_exit(char ***order, t_arr *arr);
+
+/// @param pipe_ex.c
+
+void	ex_pipe_order(char ***order, t_arr *arr);
 
 /// @param open_quotes.c
 
@@ -137,6 +145,5 @@ char	*doller_question(char *str, int stat);
 void	catch_token(t_arr *arr, t_to *ken);
 t_arr	*flexible_arr(void);
 t_to	*list_token(char **val, int typ);
-void	redirections(const char **read, char *buf);
 
 #endif

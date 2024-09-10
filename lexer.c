@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 20:06:57 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/09 16:17:09 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/10 18:11:33 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,15 @@ void	handl_to_ken(const char **read, t_arr *arr)
 	buf[i] = '\0';
 	arg = split_str_to_arg(buf);
 	if (ft_strstr(arg[0], "$?"))
+	{
 		arg[0] = doller_question(arg[0], arr->stat);
+		if (!arg[0])
+		{
+			write(2, "Error, split_str_to_arg in handl_to_ken\n", 40);
+			free_tokens(arr);
+			exit(EXIT_FAILURE);
+		}
+	}
 	catch_token(arr, list_token(arg, 'w'));
 }
 

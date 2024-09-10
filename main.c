@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/08 17:49:42 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/10 16:43:31 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,11 +108,12 @@ int	main_loop(bool first_time, char **envp, char *read, char *pwd)
 	{
 		pwd = direktory_minishell();
 		if (!pwd)
-			return (write(2, "Error, direktory_minishell in main\n", 35), 0);
+			return (write(2, "Error, direktory_minishell in main\n", 35)
+				, EXIT_FAILURE);
 		read = readline(pwd);
 		free(pwd);
 		if (!read)
-			return (0);
+			return (EXIT_SUCCESS);
 		if (has_open_quotes(read))
 		{
 			hold = unclosed_quotes(read);

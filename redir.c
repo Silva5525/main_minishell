@@ -6,12 +6,19 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 14:58:42 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/08 19:31:14 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/10 19:43:48 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief If append is true it opens the file in append mode, otherwise in
+/// it truncates the file (means overwrites the file). Then redirects the
+/// stdout (STDOUT_FILENO) to the file descriptor of the file. If it fails
+/// it writes an error message to stderr and exits the program.
+/// @param file Name of the file to redirect to.
+/// @param append pif true, appends to file, otherwise truncates file.
+/// @param arr all information about the minishell. (here needed for freeing)
 void	out_redir(char *file, bool append, t_arr *arr)
 {
 	int	fd;
@@ -36,6 +43,11 @@ void	out_redir(char *file, bool append, t_arr *arr)
 	close(fd);
 }
 
+/// @brief Opens the specified file in read only mode and redirects the
+/// stdin (STDIN_FILENO) to the file descriptor of the file. If it fails
+/// it writes an error message to stderr and exits the program.
+/// @param file name of the file to redirect from.
+/// @param arr all information about the minishell. (here needed for freeing)
 void	in_redir(char *file, t_arr *arr)
 {
 	int	fd;
@@ -56,17 +68,27 @@ void	in_redir(char *file, t_arr *arr)
 	close(fd);
 }
 
+/// @brief frees the tokens, writes an error message to stderr and exits
+/// @param arr needed for freeing
+static void	error_mini_heredoc(t_arr *arr)
+{
+	free_tokens(arr);
+	write(2, "Error, pipe or dup2 failed in mini_heredoc\n", 43);
+	exit(EXIT_FAILURE);
+}
+
+/// @brief creates a pipe and reads from stdin until the delimiter is found.
+/// Then writes the input to the pipe. After that it redirects to read from
+/// the pipe. If it fails it writes an error message to stderr and exits.
+/// @param del delimiter to stop reading
+/// @param arr all information about the minishell. (here needed for freeing)
 void	mini_heredoc(char *del, t_arr *arr)
 {
 	char	*l;
 	int		pipefd[2];
 
 	if (pipe(pipefd) < 0)
-	{
-		free_tokens(arr);
-		write(2, "Error, pipe failed in mini_heredoc\n", 35);
-		exit(EXIT_FAILURE);
-	}
+		error_mini_heredoc(arr);
 	while (1)
 	{
 		l = readline("> ");
@@ -82,14 +104,16 @@ void	mini_heredoc(char *del, t_arr *arr)
 	close(pipefd[1]);
 	if (dup2(pipefd[0], STDIN_FILENO) < 0)
 	{
-		free_tokens(arr);
-		write(2, "Error, dup2 failed in mini_heredoc\n", 35);
 		close(pipefd[0]);
-		exit(EXIT_FAILURE);
+		error_mini_heredoc(arr);
 	}
 	close(pipefd[0]);
 }
 
+/// @brief Based on the token type in the shell command, this function
+/// performs input ('<') output ('>') redirection ('>>' = 'A'), 
+/// piping ('|'), and heredoc('<<' = 'A').
+/// @param arr all information about the minishell.
 void	redir(t_arr *arr)
 {
 	size_t	i;

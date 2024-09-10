@@ -6,14 +6,32 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:26:13 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/08 18:29:06 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/09 18:03:45 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/// @brief executes the command
-/// @param arr holds all data
+/// @brief writes an error message to the standard error output
+/// errno is a global variable that is set by system calls and some library
+///functions in the event of an error to indicate what went wrong.
+/// I use #include <errno.h> to get the error number
+/// @param ENOENT No such file or directory (POSIX.1) in errno.h
+/// @param EACCES Permission denied (POSIX.1) in errno.
+void	command_not_found(void)
+{
+	if (errno == ENOENT)
+		write(2, "Error, command not found\n", 25);
+	else if (errno == EACCES)
+		write(2, "Error, permission denied\n", 26);
+	else
+		write(2, "Error, in ex_order in builtins\n", 31);
+}
+
+/// @brief executes the command by forking a child process
+/// then using execve to execute the command in the child process
+/// and waits for the child process to finish
+/// @param arr holds all data of the minishell
 void	ex_order(t_arr *arr)
 {
 	pid_t	pid;
@@ -31,7 +49,7 @@ void	ex_order(t_arr *arr)
 		if (execve(arr->ken[0]->str[0], arr->ken[0]->str, arr->envp) == -1)
 		{
 			free_tokens(arr);
-			write(2, "Error, execve failed in ex_order\n", 33);
+			command_not_found();
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -43,6 +61,8 @@ void	ex_order(t_arr *arr)
 	}
 }
 
+/// @brief 
+/// @param arr 
 void	builtin(t_arr *arr)
 {
 	size_t	i;

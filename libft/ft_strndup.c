@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/18 15:49:03 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/08/10 20:42:45 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/10 17:40:53 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char	*ft_strndup(const char *src, size_t n)
 {
 	char		*dst;
 	size_t		i;
-	
+
 	if (!src)
 		return (NULL);
 	i = ft_strnlen(src, n);

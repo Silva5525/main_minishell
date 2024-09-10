@@ -6,33 +6,11 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:02:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/09 16:16:17 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/09 20:01:43 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	free_order(char ***order)
-{
-	size_t	i;
-	size_t	j;
-
-	i = 0;
-	while (order[i])
-	{
-		j = 0;
-		while (order[i][j])
-		{
-			free(order[i][j]);
-			order[i][j] = NULL;
-			j++;
-		}
-		free(order[i]);
-		order[i] = NULL;
-		i++;
-	}
-	free(order);
-}
 
 void	mini_exit(char ***order, t_arr *arr)
 {
@@ -52,14 +30,14 @@ bool	loop_arg(t_arr *arr, char **order
 		order[k] = ft_strdup(arr->ken[hold]->str[0]);
 		if (!order[k])
 		{
-			write(2, "Error, malloc or ft_strdup failed in split_pipe_orders\n", 55);
-			return false;
+			write(2, "Error, ft_strdup failed in split_pipe_orders\n", 45);
+			return (false);
 		}
 		k++;
 		hold++;
 	}
 	order[k] = NULL;
-	return true;
+	return (true);
 }
 
 void	split_pipe_orders_loop(t_arr *arr, char ***order, size_t i, size_t hold)
@@ -74,7 +52,7 @@ void	split_pipe_orders_loop(t_arr *arr, char ***order, size_t i, size_t hold)
 			order[count_i] = (char **)malloc(sizeof(char *) * (i - hold + 1));
 			if (!order[count_i])
 			{
-				write(2, "Error, malloc or ft_strdup failed in split_pipe_orders\n", 55);
+				write(2, "Error, ft_strdup failed in split_pipe_orders\n", 45);
 				mini_exit(order, arr);
 			}
 			if (!loop_arg(arr, order[count_i], hold, i))
@@ -111,48 +89,6 @@ char	***split_pipe_orders(t_arr *arr)
 	split_pipe_orders_loop(arr, order, 0, 0);
 	order[count] = NULL;
 	return (order);
-}
-
-void	ex_pipe_order(char ***order, t_arr *arr)
-{
-	pid_t	pid;
-	int		pipefd[2];
-	int		fd;
-	size_t	i;
-
-	i = 0;
-	fd = 0;
-	while (order[i])
-	{
-		if (pipe(pipefd) < 0)
-		{
-			write(2, "Error, pipe failed in ex_pipe_order\n", 36);
-			mini_exit(order, arr);
-		}
-		pid = fork();
-		if (pid < 0)
-		{
-			write(2, "Error, fork failed in ex_pipe_order\n", 36);
-			mini_exit(order, arr);
-		}
-		if (pid == 0)
-		{
-			if (order[i + 1])
-				dup2(pipefd[1], STDOUT_FILENO);
-			if (i != 0)
-				dup2(fd, STDIN_FILENO);
-			close(pipefd[0]);
-			close(pipefd[1]);
-			//Probably we need to check if the command exists and is executable here?
-			execve(order[i][0], order[i], arr->envp);
-			write(2, "Error, execve failed in ex_pipe_order\n", 39);
-			mini_exit(order, arr);
-		}
-		waitpid(pid, NULL, 0);
-		close(pipefd[1]);
-		fd = pipefd[0];
-		i++;
-	}
 }
 
 void	do_pipe(t_arr *arr)
