@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 22:03:56 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/08/10 20:42:45 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/13 16:26:55 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@
 /// @param dst destination string
 /// @param src sorce string
 /// @return pointer to the destination string dst
-char *ft_strcpy(char *dst, const char *src)
+char	*ft_strcpy(char *dst, const char *src)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (src[i])

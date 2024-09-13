@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 21:21:59 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/08/10 20:43:17 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/13 16:30:44 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	char	*s3;
 	size_t	len1;
 	size_t	len2;
-	size_t	j;
-	size_t	i;
 
 	if (!s1 || !s2)
 		return (NULL);
@@ -34,19 +32,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	s3 = (char *)malloc((len1 + len2 + 1) * sizeof(char));
 	if (s3 == NULL)
 		return (NULL);
-	i = 0;
-	while (len1 > i)
-	{
-		s3[i] = s1[i];
-		i++;
-	}
-	j = 0;
-	while (len2 > j)
-	{
-		s3[i + j] = s2[j];
-		j++;
-	}
-	s3[i + j] = '\0';
+	strcpy(s3, s1);
+	strcpy(s3 + len1, s2);
 	return (s3);
 }
 

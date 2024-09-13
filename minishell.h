@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:52:57 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/10 18:52:41 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/12 14:50:46 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,18 +56,15 @@ typedef struct s_arr
 	int		in_fd;
 	int		out_fd;
 	int		stat;
-	// int		sig; // needed?
 	bool	first_time;
 }	t_arr;
 
-// typedef struct s_ast
-// {
-// 	int				typ;
-// 	char			*str;
-// 	struct s_ast	*right;
-// 	struct s_ast	*left;
-// }	t_ast;
-
+/// @brief struct for the built-in functions
+/// it compares the command with the built-in commands
+/// if the command is a built-in command, the corresponding function is called
+/// if the command is not a built-in command, the command is executed.
+/// @param name the name of the built-in command
+/// @param fun the function of the built-in command
 typedef void	(*t_built_f)(t_arr *arr);
 typedef struct s_builtin
 {
@@ -76,9 +73,7 @@ typedef struct s_builtin
 }	t_b;
 
 /// ########################################## @brief./built ################
-/// 
 
-void	builtin(t_arr *arr);
 void	b_echo(t_arr *arr);
 void	b_cd(t_arr *arr);
 void	b_pwd(t_arr *arr);
@@ -86,13 +81,18 @@ void	b_export(t_arr *arr);
 void	b_unset(t_arr *arr);
 void	b_env(t_arr *arr);
 void	b_exit(t_arr *arr);
-char	**ft_arr_setenv(const char *str, const char *v
-			, char **envp, bool first_time);
+char	**ft_arr_setenv(const char *str, const char *v,
+			char **envp, bool first_time);
 
 /// @param built/a_builtins.c
 
-char	**ft_arr_setenv(const char *str, const char *v, char **envp
-			, bool first_time);
+void	builtin(t_arr *arr);
+void	command_not_found(void);
+
+/// @param built/ft_arr_setenv.c
+
+char	**ft_arr_setenv(const char *str, const char *v, char **envp,
+			bool first_time);
 
 /// ########################################## @brief Sources ################
 
@@ -145,5 +145,10 @@ char	*doller_question(char *str, int stat);
 void	catch_token(t_arr *arr, t_to *ken);
 t_arr	*flexible_arr(void);
 t_to	*list_token(char **val, int typ);
+
+/// @param execute.c
+
+void	ex_order(t_arr *arr);
+char	**path_dir(t_arr *arr);
 
 #endif

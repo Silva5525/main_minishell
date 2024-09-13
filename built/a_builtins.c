@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:26:13 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/09 18:03:45 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/13 15:19:40 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,41 +28,11 @@ void	command_not_found(void)
 		write(2, "Error, in ex_order in builtins\n", 31);
 }
 
-/// @brief executes the command by forking a child process
-/// then using execve to execute the command in the child process
-/// and waits for the child process to finish
+/// @brief is the handler for the built-in commands.
+/// uses the struct t_b to compare the command with the built-in commands
+/// if the command is a built-in command, the corresponding function is called
+/// if the command is not a built-in command, the command is executed.
 /// @param arr holds all data of the minishell
-void	ex_order(t_arr *arr)
-{
-	pid_t	pid;
-	int		stat;
-
-	pid = fork();
-	if (pid < 0)
-	{
-		free_tokens(arr);
-		write(2, "Error, fork failed in ex_order\n", 31);
-		exit(EXIT_FAILURE);
-	}
-	else if (pid == 0)
-	{
-		if (execve(arr->ken[0]->str[0], arr->ken[0]->str, arr->envp) == -1)
-		{
-			free_tokens(arr);
-			command_not_found();
-			exit(EXIT_FAILURE);
-		}
-	}
-	else
-	{
-		waitpid(pid, &stat, 0);
-		if (WIFEXITED(stat))
-			arr->stat = WEXITSTATUS(stat);
-	}
-}
-
-/// @brief 
-/// @param arr 
 void	builtin(t_arr *arr)
 {
 	size_t	i;
@@ -76,7 +46,6 @@ void	builtin(t_arr *arr)
 	built[5] = (t_b){"env", b_env};
 	built[6] = (t_b){"exit", b_exit};
 	built[7] = (t_b){NULL, NULL};
-
 	i = 0;
 	while (built[i].name)
 	{

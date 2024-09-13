@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:42:54 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/10 19:52:09 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/12 15:57:12 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static void	while_search(char **search, char *safe)
 /// @param envp environment array
 /// @param out the expanded string
 /// @return hold or NULL if an error occurred
-static char	*doller_search(char *str,char *hold, char **envp, char *out)
+static char	*doller_search(char *str, char *hold, char **envp, char *out)
 {
 	char	*doller;
 	char	*search;

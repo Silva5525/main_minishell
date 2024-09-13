@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:07:54 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/08 18:51:00 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/11 14:55:33 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ static char	*string_name(t_arr *arr, size_t i)
 		free_tokens(arr);
 		exit(EXIT_FAILURE);
 	}
-	str = ft_strndup(arr->ken[i]->str[0]
-			, ft_strchr(arr->ken[i]->str[0], '=') - arr->ken[i]->str[0]);
+	str = ft_strndup(arr->ken[i]->str[0],
+			ft_strchr(arr->ken[i]->str[0], '=') - arr->ken[i]->str[0]);
 	if (!str[0])
 	{
 		write(2, "Error, ft_strndup in b_export\n", 31);

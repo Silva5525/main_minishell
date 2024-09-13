@@ -6,18 +6,17 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:06:40 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/07 11:22:11 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/13 15:22:31 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/// @brief checks if there are any -n flags in the input.. and sets 
-/// minus_nl to true if there are any, or let it be false if there are none.
-/// @param minus_nl bool for -n flag.
-/// @param i index of the token.
-/// @param arr holds the tokens.
-/// @return if there is a -n flag return true else false.
+/// @brief if the command has a -n flag it will not print a newline
+/// @param minus_nl the flag for the newline
+/// @param i index of the command
+/// @param arr the struct with all the data
+/// @return a bool if the flag is set
 bool	minus_newline(bool minus_nl, size_t *i, t_arr *arr)
 {
 	size_t	j;
@@ -36,6 +35,9 @@ bool	minus_newline(bool minus_nl, size_t *i, t_arr *arr)
 	return (minus_nl);
 }
 
+/// @brief strips the quotes from the string
+/// @param str the string to strip the quotes from
+/// @return the string without the quotes
 char	*strip_quotes(const char *str)
 {
 	size_t	len;
@@ -81,6 +83,11 @@ void	b_echo(t_arr *arr)
 	tmp = NULL;
 	minus_nl = false;
 	i = 1;
+	if (arr->size == 1)
+	{
+		printf("\n");
+		return ;
+	}
 	minus_nl = minus_newline(minus_nl, &i, arr);
 	while (i < arr->size && arr->ken[i]->str[0])
 	{

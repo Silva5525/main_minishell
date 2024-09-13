@@ -6,33 +6,33 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 19:41:01 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/08/10 20:42:45 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/13 16:42:05 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void flood_l(char **tab, t_xy size, int x, int y, char target)
+void	flood_l(char **tab, int x, int y, char target)
 {
-	if (x < 0 || x >= size.x || y < 0 || y >= size.y)
+	if (x < 0 || y < 0 || tab[y] == NULL || tab[y][x] == '\0')
 		return ;
 	if (tab[y][x] == 'F' || tab[y][x] != target)
 		return ;
 	tab[y][x] = 'F';
-	flood_l(tab, size, x + 1, y, target);
-	flood_l(tab, size, x - 1, y, target);
-	flood_l(tab, size, x, y + 1, target);
-	flood_l(tab, size, x, y - 1, target);
+	flood_l(tab, x + 1, y, target);
+	flood_l(tab, x - 1, y, target);
+	flood_l(tab, x, y + 1, target);
+	flood_l(tab, x, y - 1, target);
 }
 
-void ft_fill(char **tab, t_xy size, t_xy begin)
+void	ft_fill(char **tab, t_xy size, t_xy begin)
 {
-	char target;
+	char	target;
 
-	if (begin.x < 0 || begin.x > size.x || begin.y < 0 || begin.y >= size.y)
+	if (begin.x < 0 || begin.x >= size.x || begin.y < 0 || begin.y >= size.y)
 		return ;
 	target = tab[begin.y][begin.x];
-	flood_l(tab, size, begin.x, begin.y, target);
+	flood_l(tab, begin.x, begin.y, target);
 }
 
 /// TEST MAIN ///#######################################################

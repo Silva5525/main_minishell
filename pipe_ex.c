@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:01:12 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/10 16:41:16 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/13 16:18:56 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,40 @@
 /// @param arr holds all the information about the minishell
 void	do_execve(char **order, char ***order_exit, t_arr *arr)
 {
-	if (access(order[0], F_OK) == -1 || access(order[0], X_OK) == -1)
+	char	**dirs;
+	char	*full_path;
+	int		command_found;
+	size_t	i;
+	char	*hold;
+
+	dirs = path_dir(arr);
+	if (!dirs)
 	{
-		write(2, "Error, command not executable or not found\n", 43);
+		write(2, "Error, path_dir failed in do_execve\n", 36);
 		mini_exit(order_exit, arr);
 	}
-	execve(order[0], order, arr->envp);
-	write(2, "Error, execve failed in do_execve\n", 35);
-	printf("Failed to execute command: %s\n", order[0]);
+	i = 0;
+	command_found = 0;
+	printf("Order[0]: %s\n", order[0]); /// debug
+	while (dirs[i])
+	{
+		hold = ft_strjoin(dirs[i], "/");
+		full_path = ft_strjoin(hold, order[0]);
+		free(hold);
+		if (access(full_path, F_OK) == 0 && access(full_path, X_OK) == 0)
+		{
+			command_found = 1;
+			execve(full_path, order, arr->envp);
+			write(2, "Error, execve in do_execve\n", 27);
+			free(full_path);
+			mini_exit(order_exit, arr);
+		}
+		free(full_path);
+		i++;
+		// full_path = ft_build_f_path(dirs[i], "/"); check this
+	}
+	if (!command_found)
+		write(2, "Error, command not found\n", 25);
 	mini_exit(order_exit, arr);
 }
 
@@ -115,6 +141,7 @@ void	ex_pipe_order(char ***order, t_arr *arr)
 	size_t	i;
 
 	i = 0;
+	fd = 0;
 	while (order[i])
 	{
 		pid = do_child(pipefd, order, arr);

@@ -6,12 +6,11 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:17:58 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/08 17:18:30 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/13 16:25:48 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 /// @brief When user press Ctrl+C the input will be canceled
 /// and the shell will present a new prompt on a new line.
