@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:17:58 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/13 16:25:48 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/14 20:03:43 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,4 +102,13 @@ bool	pipe_search(t_arr *arr)
 		i++;
 	}
 	return (false);
+}
+
+/// @brief  just a helper for do_execve.. prints an error message and exits
+/// @param arr the struct with all data in minishell
+/// @param order_exit the order tripple pointer with all commands to be freed
+void	out_error(t_arr *arr, char ***order_exit)
+{
+	write(2, "Error, path_dir or ft_build_f_path failed in do_execve\n", 55);
+	mini_exit(order_exit, arr);
 }

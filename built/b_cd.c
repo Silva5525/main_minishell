@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:07:05 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/08 18:52:20 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/14 19:58:46 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ static void	split_b_cd(char **argv, size_t argc, t_arr *arr)
 		new_direktory = getcwd(NULL, 0);
 		if (new_direktory)
 		{
-			printf("new directory: %s\n", new_direktory);
 			free(arr->direktory);
 			arr->direktory = new_direktory;
 		}

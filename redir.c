@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 14:58:42 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/10 19:43:48 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/14 20:01:40 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,4 +133,5 @@ void	redir(t_arr *arr)
 			mini_heredoc(arr->ken[i + 1]->str[0], arr);
 		i++;
 	}
+	builtin(arr);
 }

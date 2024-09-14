@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:01:12 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/13 16:18:56 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/14 19:53:22 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,38 +25,28 @@ void	do_execve(char **order, char ***order_exit, t_arr *arr)
 {
 	char	**dirs;
 	char	*full_path;
-	int		command_found;
 	size_t	i;
-	char	*hold;
 
 	dirs = path_dir(arr);
 	if (!dirs)
-	{
-		write(2, "Error, path_dir failed in do_execve\n", 36);
-		mini_exit(order_exit, arr);
-	}
+		out_error(arr, order_exit);
 	i = 0;
-	command_found = 0;
-	printf("Order[0]: %s\n", order[0]); /// debug
 	while (dirs[i])
 	{
-		hold = ft_strjoin(dirs[i], "/");
-		full_path = ft_strjoin(hold, order[0]);
-		free(hold);
+		full_path = ft_build_f_path(dirs[i], order[0]);
+		if (!full_path)
+			out_error(arr, order_exit);
 		if (access(full_path, F_OK) == 0 && access(full_path, X_OK) == 0)
 		{
-			command_found = 1;
 			execve(full_path, order, arr->envp);
-			write(2, "Error, execve in do_execve\n", 27);
 			free(full_path);
+			write(2, "Error, execve in do_execve\n", 27);
 			mini_exit(order_exit, arr);
 		}
 		free(full_path);
 		i++;
-		// full_path = ft_build_f_path(dirs[i], "/"); check this
 	}
-	if (!command_found)
-		write(2, "Error, command not found\n", 25);
+	write(2, "Error, command not found in do_execve\n", 38);
 	mini_exit(order_exit, arr);
 }
 
@@ -66,10 +56,11 @@ void	do_execve(char **order, char ***order_exit, t_arr *arr)
 /// file descriptors. 
 /// @param pipefd pipe file descriptor [0]reading, [1]writing.
 /// @param fd file descriptor for input redirection (stdin).
-/// @param last_order Indicates if the current command is the last one in pipe.
-void	set_pipe_and_fds(int pipefd[2], size_t fd, size_t last_order)
+/// @param i Indicates if the current command is the last one in pipe with
+/// @param order[i + 1]. so that the last command does not write to the pipe.
+void	set_pipe_and_fds(int pipefd[2], size_t fd, size_t i, char ***order)
 {
-	if (!last_order)
+	if (order[i + 1])
 		dup2(pipefd[1], STDOUT_FILENO);
 	if (fd != 0)
 		dup2(fd, STDIN_FILENO);
@@ -86,7 +77,9 @@ void	set_pipe_and_fds(int pipefd[2], size_t fd, size_t last_order)
 /// @param pid The process id of the child process.
 /// @param arr->stat Holds the status of the shell.
 /// @param pipefd pipe file descriptor used in the current process.
-void	do_parent(pid_t pid, t_arr *arr, int pipefd[2])
+/// @param fd file descriptor for input redirection (stdin).
+/// @return The file descriptor for the next command in the pipe.
+size_t	do_parent(pid_t pid, t_arr *arr, int pipefd[2], size_t fd)
 {
 	if (waitpid(pid, &arr->stat, 0) == -1)
 	{
@@ -97,7 +90,11 @@ void	do_parent(pid_t pid, t_arr *arr, int pipefd[2])
 		arr->stat = WEXITSTATUS(arr->stat);
 	else if (WIFSIGNALED(arr->stat))
 		arr->stat = 128 + WTERMSIG(arr->stat);
+	if (fd != 0)
+		close(fd);
+	fd = pipefd[0];
 	close(pipefd[1]);
+	return (fd);
 }
 
 /// @brief Creates a pipe and a child process with fork. If pipe()
@@ -147,13 +144,12 @@ void	ex_pipe_order(char ***order, t_arr *arr)
 		pid = do_child(pipefd, order, arr);
 		if (pid == 0)
 		{
-			set_pipe_and_fds(pipefd, fd, i);
+			set_pipe_and_fds(pipefd, fd, i, order);
 			do_execve(order[i], order, arr);
 		}
-		do_parent(pid, arr, pipefd);
-		if (i != 0)
-			close(fd);
-		fd = pipefd[0];
+		fd = do_parent(pid, arr, pipefd, fd);
 		i++;
 	}
+	while (wait(NULL) > 0)
+		;
 }

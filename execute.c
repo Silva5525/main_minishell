@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:20:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/13 16:22:51 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/14 17:26:09 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ char	**path_dir(t_arr *arr)
 	}
 	if (!path)
 		return (write(2, "Error, PATH not found with path_dir\n", 36), NULL);
-	printf("PATH: %s\n", path);
 	dirs = ft_split(path, ':');
 	if (!dirs)
 		return (write(2, "Error, ft_split in path_dir\n", 28), NULL);
@@ -53,12 +52,18 @@ char	**path_dir(t_arr *arr)
 /// @return nothing if success, EXIT_FAILURE if the command is not executable.
 static int	try_order(char *full_path, char **args, t_arr *arr)
 {
+	if (access(full_path, F_OK) != 0)
+	{
+		write(2, "Error, access in try_order\n", 27);
+		return (EXIT_FAILURE);
+	}
 	if (access(full_path, X_OK) == 0)
 	{
 		execve(full_path, args, arr->envp);
 		write(2, "Error, execve in try_order\n", 27);
 		return (EXIT_FAILURE);
 	}
+	write(2, "Error, permission denied in try_order\n", 38);
 	return (EXIT_SUCCESS);
 }
 

@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/10 16:43:31 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/14 20:01:55 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,16 +38,15 @@ void	main_process(char *read, char **envp, bool first_time)
 	if (!arr)
 	{
 		free(read);
-		write(2, "Error, to_ken_producer\n", 24);
+		write(2, "Error, to_ken_producer in main_process\n", 39);
 		return ;
 	}
 	arr->first_time = first_time;
 	alloc_envp(arr, envp);
-	redir(arr);
 	if (pipe_search(arr))
 		do_pipe(arr);
 	else
-		builtin(arr);
+		redir(arr);
 	free_tokens(arr);
 	free(read);
 }
@@ -132,13 +131,10 @@ int	main_loop(bool first_time, char **envp, char *read, char *pwd)
 /// @return 
 int	main(int argc, char **argv, char **envp)
 {
-	bool	first_time;
-
 	(void)argc;
 	(void)argv;
 	signal(SIGINT, read_signal);
 	signal(SIGQUIT, SIG_IGN);
-	first_time = true;
-	main_loop(first_time, envp, NULL, NULL);
+	main_loop(true, envp, NULL, NULL);
 	return (write(1, "exit\n", 5), EXIT_SUCCESS);
 }

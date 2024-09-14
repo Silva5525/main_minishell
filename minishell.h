@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:52:57 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/12 14:50:46 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/14 19:56:06 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ bool	pipe_search(t_arr *arr);
 void	envp_copy(t_arr *arr, char **envp, size_t i);
 void	alloc_envp(t_arr *arr, char **envp);
 void	read_signal(int sig);
+void	out_error(t_arr *arr, char ***order_exit);
 
 /// @param manage_token.c
 

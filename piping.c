@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:02:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/09 20:01:43 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/14 20:05:26 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,10 @@ void	split_pipe_orders_loop(t_arr *arr, char ***order, size_t i, size_t hold)
 				mini_exit(order, arr);
 			}
 			if (!loop_arg(arr, order[count_i], hold, i))
-				mini_exit(order, arr); // potential memory leaks, probably we need to free all partially allocated memory before we go ahead with mini_exit?
+			{
+				write(2, "Error, loop_arg failed in split_pipe_orders\n", 45);
+				mini_exit(order, arr);
+			}
 			hold = i + 1;
 			count_i++;
 		}
