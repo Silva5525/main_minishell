@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:52:57 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/14 19:56:06 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/15 16:38:59 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,8 @@ char	**ft_arr_setenv(const char *str, const char *v, char **envp,
 /// @param tokenize.c
 
 char	**split_str_to_arg(char *str);
-
+bool	is_env_token(char *str);
+int		env_assign(char *read, char ***envp);
 /// @param lexer.c
 
 void	to_ken_producer(const char *read, t_arr *arr);

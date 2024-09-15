@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/14 20:01:55 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/15 16:40:21 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,10 @@ int	main_loop(bool first_time, char **envp, char *read, char *pwd)
 			free(read);
 			read = hold;
 		}
-		main_process(read, envp, first_time);
+		if (is_env_token(read))
+			env_assign(read, &envp);
+		else
+			main_process(read, envp, first_time);
 		first_time = false;
 	}
 }

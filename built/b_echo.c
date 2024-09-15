@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:06:40 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/13 15:22:31 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/15 19:47:24 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,8 @@
 /// @return a bool if the flag is set
 bool	minus_newline(bool minus_nl, size_t *i, t_arr *arr)
 {
-	size_t	j;
-
-	while (arr->ken[0]->str[*i] && arr->ken[0]->str[*i][0] == '-'
-			&& arr->ken[0]->str[*i][1] == 'n')
+	while (strncmp(arr->ken[*i]->str[0], "-n", 2) == 0)
 	{
-		j = 2;
-		while (arr->ken[0]->str[*i][j] == 'n')
-			j++;
-		if (arr->ken[0]->str[*i][j] != '\0')
-			break ;
 		minus_nl = true;
 		(*i)++;
 	}
@@ -57,19 +49,34 @@ char	*strip_quotes(const char *str)
 	return (strdup(str));
 }
 
-void	echo_helper(char *joined_str, char *tmp, bool minus_nl)
+void	echo_helper(char *joined_str, char *hold, bool minus_nl)
 {
 	if (joined_str && joined_str[strlen(joined_str) - 1] == ' ')
 		joined_str[strlen(joined_str) - 1] = '\0';
-	tmp = strip_quotes(joined_str);
-	if (tmp)
-		printf("%s", tmp);
+	hold = strip_quotes(joined_str);
+	if (!hold)
+	{
+		write(2, "Error, strip_quotes in echo_helper\n", 35);
+		return ;
+	}
+	if (hold)
+		printf("%s", hold);
 	if (minus_nl == false)
 		printf("\n");
 	if (joined_str)
 		free(joined_str);
-	if (tmp)
-		free(tmp);
+	if (hold)
+		free(hold);
+}
+
+void	joined_str_error(char *joined_str, t_arr *arr)
+{
+	if (!joined_str)
+	{
+		write(2, "Error, ft_strjoin_multiple in b_echo\n", 38);
+		free_tokens(arr);
+		exit(EXIT_FAILURE);
+	}
 }
 
 void	b_echo(t_arr *arr)
@@ -77,10 +84,8 @@ void	b_echo(t_arr *arr)
 	bool	minus_nl;
 	size_t	i;
 	char	*joined_str;
-	char	*tmp;
 
 	joined_str = NULL;
-	tmp = NULL;
 	minus_nl = false;
 	i = 1;
 	if (arr->size == 1)
@@ -92,8 +97,10 @@ void	b_echo(t_arr *arr)
 	while (i < arr->size && arr->ken[i]->str[0])
 	{
 		joined_str = ft_strjoin_multiple(joined_str, arr->ken[i]->str[0]);
+		joined_str_error(joined_str, arr);
 		joined_str = ft_strjoin_multiple(joined_str, " ");
+		joined_str_error(joined_str, arr);
 		i++;
 	}
-	echo_helper(joined_str, tmp, minus_nl);
+	echo_helper(joined_str, NULL, minus_nl);
 }

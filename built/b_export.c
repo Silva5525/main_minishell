@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:07:54 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/11 14:55:33 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/15 18:23:52 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ static void	simple_export(t_arr *arr)
 /// sets the environment variable to the given value.
 /// @param arr the struct that holds all data.
 /// @param str the variable name to be set.
-/// @param tmp value to be assigned to the variable.
-static void	export_value(t_arr *arr, char *str, char *tmp)
+/// @param hold value to be assigned to the variable.
+static void	export_value(t_arr *arr, char *str, char *hold)
 {
 	char	**new_envp;
 
-	new_envp = ft_arr_setenv(str, tmp, arr->envp, arr->first_time);
+	new_envp = ft_arr_setenv(str, hold, arr->envp, arr->first_time);
 	if (!new_envp)
 	{
 		write(2, "Error, ft_arr_setenv in b_export\n", 33);
@@ -99,7 +99,7 @@ void	b_export(t_arr *arr)
 {
 	size_t	i;
 	char	*str;
-	char	*tmp;
+	char	*hold;
 
 	if (arr->size == 1)
 		return (simple_export(arr));
@@ -107,9 +107,9 @@ void	b_export(t_arr *arr)
 	while (i < arr->size)
 	{
 		str = string_name(arr, i);
-		tmp = ft_strchr(arr->ken[i]->str[0], '=');
-		if (tmp)
-			export_value(arr, str, tmp + 1);
+		hold = ft_strchr(arr->ken[i]->str[0], '=');
+		if (hold)
+			export_value(arr, str, hold + 1);
 		else
 			export_no_value(arr, str);
 		free(str);
