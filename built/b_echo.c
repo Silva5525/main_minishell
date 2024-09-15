@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:06:40 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/15 19:47:24 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/15 20:05:50 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,11 @@ char	*strip_quotes(const char *str)
 	return (strdup(str));
 }
 
+/// @brief Strips quotes from the concantenated string, prints the string
+/// and frees the memory.
+/// @param joined_str concantenated string to print.
+/// @param hold temporary pointer to the processed string without quotes.
+/// @param minus_nl flag to print a newline or not.
 void	echo_helper(char *joined_str, char *hold, bool minus_nl)
 {
 	if (joined_str && joined_str[strlen(joined_str) - 1] == ' ')
@@ -69,6 +74,10 @@ void	echo_helper(char *joined_str, char *hold, bool minus_nl)
 		free(hold);
 }
 
+/// @brief if a error occurs in ft_strjoin_multiple in b_echo
+/// it will print an error message, free the tokens and exit the program.
+/// @param joined_str the string that should be joined
+/// @param arr the struct with all the data
 void	joined_str_error(char *joined_str, t_arr *arr)
 {
 	if (!joined_str)
@@ -79,6 +88,10 @@ void	joined_str_error(char *joined_str, t_arr *arr)
 	}
 }
 
+/// @brief handles the echo command. It prints the arguments to the terminal.
+/// If the -n flag is set, it will not print a newline. If no arguments are
+/// given, it will print a newline.
+/// @param arr holds all information about the minishell
 void	b_echo(t_arr *arr)
 {
 	bool	minus_nl;
