@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 18:28:56 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/08 18:44:49 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/16 17:34:49 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ char	*create_variable(const char *str, const char *v)
 	if (!hold)
 		return (NULL);
 	new = ft_strjoin(hold, v);
+	if (!new)
+		return (free(hold), NULL);
 	free(hold);
 	return (new);
 }

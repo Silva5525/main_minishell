@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:20:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/14 17:26:09 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/16 18:11:50 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,7 @@ char	**path_dir(t_arr *arr)
 static int	try_order(char *full_path, char **args, t_arr *arr)
 {
 	if (access(full_path, F_OK) != 0)
-	{
-		write(2, "Error, access in try_order\n", 27);
 		return (EXIT_FAILURE);
-	}
 	if (access(full_path, X_OK) == 0)
 	{
 		execve(full_path, args, arr->envp);
@@ -64,7 +61,7 @@ static int	try_order(char *full_path, char **args, t_arr *arr)
 		return (EXIT_FAILURE);
 	}
 	write(2, "Error, permission denied in try_order\n", 38);
-	return (EXIT_SUCCESS);
+	return (EXIT_FAILURE);
 }
 
 /// @brief Tests if the command can be executed in the provided path.
@@ -77,11 +74,14 @@ static int	try_order(char *full_path, char **args, t_arr *arr)
 static int	test_t_e_c(char *full_path, char **args, t_arr *arr)
 {
 	if (!full_path)
-		return (-1);
-	printf("Trying: %s\n", full_path);
-	try_order(full_path, args, arr);
+		return (EXIT_FAILURE);
+	if (try_order(full_path, args, arr) == 0)
+	{
+		free(full_path);
+		return (EXIT_SUCCESS);
+	}
 	free(full_path);
-	return (0);
+	return (EXIT_FAILURE);
 }
 
 /// @brief Trys to locate and execute the command in the directories listed in

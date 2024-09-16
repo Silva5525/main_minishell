@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:07:54 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/15 18:23:52 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/16 17:33:39 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ static void	simple_export(t_arr *arr)
 		printf("declare -x %.*s=\"%s\"\n",
 			(int)(ft_strchr(arr->envp[i], '=') - arr->envp[i]),
 			arr->envp[i], ft_strchr(arr->envp[i], '=') + 1);
+		i++; /// reminder change printf here
 	}
 }
 
