@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:20:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/16 18:11:50 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/17 10:49:57 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	**path_dir(t_arr *arr)
 /// @param args Arguments to the command.
 /// @param arr all information about the minishell. (here the environment)
 /// @return nothing if success, EXIT_FAILURE if the command is not executable.
-static int	try_order(char *full_path, char **args, t_arr *arr)
+int	try_order(char *full_path, char **args, t_arr *arr)
 {
 	if (access(full_path, F_OK) != 0)
 		return (EXIT_FAILURE);
@@ -98,11 +98,10 @@ static int	find_to_ex(char *order, char **args, t_arr *arr)
 	char	*full_path;
 	size_t	i;
 
+	absolute_relative(arr, order, args);
 	dirs = path_dir(arr);
-	if (!dirs)
-		return (EXIT_FAILURE);
 	i = 0;
-	while (dirs[i])
+	while (dirs && dirs[i])
 	{
 		full_path = ft_build_f_path(dirs[i], order);
 		i++;

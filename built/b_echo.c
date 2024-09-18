@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:06:40 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/15 20:05:50 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/18 13:28:38 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,11 @@ void	b_echo(t_arr *arr)
 	{
 		joined_str = ft_strjoin_multiple(joined_str, arr->ken[i]->str[0]);
 		joined_str_error(joined_str, arr);
-		joined_str = ft_strjoin_multiple(joined_str, " ");
-		joined_str_error(joined_str, arr);
+		if (i < arr->size - 1)
+		{
+			joined_str = ft_strjoin_multiple(joined_str, " ");
+			joined_str_error(joined_str, arr);
+		}
 		i++;
 	}
 	echo_helper(joined_str, NULL, minus_nl);

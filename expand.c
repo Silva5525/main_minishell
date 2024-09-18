@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:42:54 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/16 17:36:26 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/18 13:24:44 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,26 @@ static char	*doller_search(char *str, char *hold, char **envp, char *out)
 	return (hold);
 }
 
+// char	*ft_strjoin(char const *s1, char const *s2, size_t len2)
+// {
+// 	char	*s3;
+// 	size_t	len1;
+// 	size_t	len2;
+
+// 	if (!s1 || !s2)
+// 		return (NULL);
+// 	len1 = ft_strlen(s1);
+// 	len2 = ft_strlen(s2);
+// 	printf("len2 = %li\n", len2);
+// 	printf("s2 = %s\n", s2);
+// 	s3 = (char *)malloc((len1 + len2 + 1) * sizeof(char));
+// 	if (s3 == NULL)
+// 		return (NULL);
+// 	strcpy(s3, s1);
+// 	strcpy(s3 + len1, s2);
+// 	return (s3);
+// }
+
 /// @brief expands the environment variables in the read string
 /// if the string contains a $ followed by a valid variable name
 /// the variable will be replaced with its value.
@@ -129,9 +149,45 @@ char	*expanding_env(char *read, char **envp, t_arr *arr)
 	out = doller_search(str, hold, envp, NULL);
 	if (!out)
 		return (free(hold), NULL);
+	if (ft_strncmp(str, out, ft_strlen(str)) == 0)
+		return (out);
 	out2 = ft_strjoin(out, str);
 	free(out);
 	if (!out2)
 		return (NULL);
 	return (out2);
 }
+
+// char	*expanding_env(char *read, char **envp, t_arr *arr)
+// {
+// 	char	*hold;
+// 	char	*out;
+// 	char	*out2;
+// 	char	*str;
+// 	char	*doller_quest;
+
+// 	printf("read: %s\n", read); /// debug
+// 	printf("arr->stat: %d\n", arr->stat); /// debug
+// 	if (!read)
+// 		return (NULL);
+// 	str = read;
+// 	printf("str: %s\n", str); /// debug
+// 	hold = ft_strdup("");
+// 	if (!hold)
+// 		return (NULL);
+// 	doller_quest = ft_strstr(str, "$?");
+// 	printf("doller_quest: %s\n", doller_quest); /// debug
+// 	if (doller_quest)
+// 		return (free(hold), doller_question(str, arr->stat));
+// 	out = doller_search(str, hold, envp, NULL);
+// 	if (!out)
+// 		return (free(hold), NULL);
+// 	printf("out: %s\n", out); /// debug
+// 	out2 = ft_strjoin(out, str);
+// 	free(out);
+// 	out = NULL;
+// 	if (!out2)
+// 		return (NULL);
+// 	printf("out2: %s\n", out2); /// debug
+// 	return (out2);
+// }

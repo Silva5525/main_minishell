@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:52:57 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/15 16:38:59 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/16 20:47:37 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,10 @@ void	alloc_envp(t_arr *arr, char **envp);
 void	read_signal(int sig);
 void	out_error(t_arr *arr, char ***order_exit);
 
+/// @param mini_helper2.c
+
+void	absolute_relative(t_arr *arr, char *order, char **args);
+
 /// @param manage_token.c
 
 char	*doller_question(char *str, int stat);
@@ -152,5 +156,6 @@ t_to	*list_token(char **val, int typ);
 
 void	ex_order(t_arr *arr);
 char	**path_dir(t_arr *arr);
+int		try_order(char *full_path, char **args, t_arr *arr);
 
 #endif

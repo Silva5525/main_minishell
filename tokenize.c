@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 18:27:22 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/16 17:44:27 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/17 14:13:34 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,24 @@ char	**split_str_to_arg(char *str)
 /// @return returns true if the string is a environment variable.
 bool	is_env_token(char *str)
 {
+	size_t	i;
+
+	i = 0;
+	if (str && ft_strncmp(str, "export", 6) == 0 && (str[6] == ' '
+			|| str[6] == '\0'))
+		return (false);
 	if (str && ft_strchr(str, '=') && ft_isalpha(str[0]))
+	{
+		while (str[i] && str[i] != '=')
+		{
+			if (!ft_isupper(str[i]) && str[i] != '_')
+				return (false);
+			if (ft_isspace(str[i]))
+				return (false);
+			i++;
+		}
 		return (true);
+	}
 	return (false);
 }
 
