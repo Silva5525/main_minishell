@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:51:53 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/10 18:55:25 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/20 17:04:35 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void	free_order(char ***order)
 /// @param i index of the t_arr->envp.
 void	free_envp(t_arr *arr, size_t i)
 {
-	i = 0;
 	if (!arr->first_time && arr->envp)
 	{
 		i = 0;
@@ -81,7 +80,6 @@ void	free_envp(t_arr *arr, size_t i)
 /// @param j index of the t_arr->ken->str.
 void	free_ken_str(t_arr *arr, size_t i, size_t j)
 {
-	i = 0;
 	while (i < arr->size)
 	{
 		if (arr->ken[i])
@@ -94,8 +92,7 @@ void	free_ken_str(t_arr *arr, size_t i, size_t j)
 					while (arr->ken[i]->str[j])
 					{
 						free(arr->ken[i]->str[j]);
-						arr->ken[i]->str[j] = NULL;
-						j++;
+						arr->ken[i]->str[j++] = NULL;
 					}
 				}
 				free(arr->ken[i]->str);
@@ -106,6 +103,8 @@ void	free_ken_str(t_arr *arr, size_t i, size_t j)
 		}
 		i++;
 	}
+	if (arr->ken)
+		free(arr->ken);
 }
 
 /// @brief frees the whole t_arr struct and all its members and sets them
@@ -122,10 +121,5 @@ void	free_tokens(t_arr *arr)
 	}
 	free_envp(arr, 0);
 	free_ken_str(arr, 0, 0);
-	if (arr->ken)
-	{
-		free(arr->ken);
-		arr->ken = NULL;
-	}
 	free(arr);
 }

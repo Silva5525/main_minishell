@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:52:57 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/16 20:47:37 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/20 17:06:30 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,6 @@ void	b_export(t_arr *arr);
 void	b_unset(t_arr *arr);
 void	b_env(t_arr *arr);
 void	b_exit(t_arr *arr);
-char	**ft_arr_setenv(const char *str, const char *v,
-			char **envp, bool first_time);
 
 /// @param built/a_builtins.c
 
@@ -108,11 +106,14 @@ void	to_ken_producer(const char *read, t_arr *arr);
 /// @param expand.c
 
 char	*expanding_env(char *read, char **envp, t_arr *arr);
+char	*ft_getenv_val(char **envp, char *str);
 
 /// @param free_tokens.c
 
 void	free_tokens(t_arr *arr);
+void	free_envp(t_arr *arr, size_t i);
 void	free_order(char ***order);
+void	free_ken_str(t_arr *arr, size_t i, size_t j);
 void	free_doller_question(char *first, char *last, char *stat_str, bool er);
 
 /// @param redir.c
@@ -144,6 +145,8 @@ void	out_error(t_arr *arr, char ***order_exit);
 /// @param mini_helper2.c
 
 void	absolute_relative(t_arr *arr, char *order, char **args);
+void	reset_arr(t_arr *arr);
+void	unclosed_quotes_handler(char *hold, char *read);
 
 /// @param manage_token.c
 

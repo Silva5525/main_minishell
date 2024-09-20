@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/17 19:42:50 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/02 15:49:45 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/20 18:27:43 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_unsetenv(const char *str, char **envp)
 	int	len;
 
 	if (!str || ft_strchr(str, '=') != NULL || *str == '\0')
-		return (-1);
+		return (EXIT_FAILURE);
 	len = ft_strlen(str);
 	i = 0;
 	while (envp[i])

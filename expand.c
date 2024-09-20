@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:42:54 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/18 13:24:44 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/19 10:18:04 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@
 /// @param envp the environment array
 /// @param str string to search
 /// @return variable value or NULL if the variable is not found
-static char	*ft_getenv_val(char **envp, char *str)
+char	*ft_getenv_val(char **envp, char *str)
 {
 	size_t		i;
 	size_t		j;
 
+	if (!str || !*str)
+		return (NULL);
 	i = 0;
 	j = ft_strlen(str);
 	while (envp[i])

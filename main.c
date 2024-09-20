@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/17 15:13:20 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/20 16:17:20 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,10 @@
 /// @param read the input readet from the readline.
 /// @param envp the environment variables.
 /// @param first_time bool if true envp will be set to the envp (leak handling)
-void	main_process(char *read, char **envp, bool first_time)
+void	main_process(char *read, char **envp, bool first_time, t_arr *arr)
 {
-	t_arr	*arr;
 	char	*expand_r;
 
-	arr = flexible_arr();
 	if (!arr)
 		return ;
 	add_history(read);
@@ -47,7 +45,6 @@ void	main_process(char *read, char **envp, bool first_time)
 		do_pipe(arr);
 	else
 		redir(arr);
-	free_tokens(arr);
 	free(read);
 }
 
@@ -99,10 +96,11 @@ char	*direktory_minishell(void)
 	return (direktory_minishell2(pwd, out));
 }
 
-int	main_loop(bool first_time, char **envp, char *read, char *pwd)
+int	main_loop(t_arr *arr, char **envp, char *read, char *pwd)
 {
-	char	*hold;
+	bool	first_time;
 
+	first_time = true;
 	while (1)
 	{
 		pwd = direktory_minishell();
@@ -114,15 +112,12 @@ int	main_loop(bool first_time, char **envp, char *read, char *pwd)
 		if (!read)
 			return (EXIT_SUCCESS);
 		if (has_open_quotes(read))
-		{
-			hold = unclosed_quotes(read);
-			free(read);
-			read = hold;
-		}
+			unclosed_quotes_handler(NULL, read);
 		if (is_env_token(read))
 			env_assign(read, &envp);
 		else
-			main_process(read, envp, first_time);
+			main_process(read, envp, first_time, arr);
+		reset_arr(arr);
 		first_time = false;
 	}
 }
@@ -134,10 +129,16 @@ int	main_loop(bool first_time, char **envp, char *read, char *pwd)
 /// @return 
 int	main(int argc, char **argv, char **envp)
 {
+	t_arr	*arr;
+
 	(void)argc;
 	(void)argv;
 	signal(SIGINT, read_signal);
 	signal(SIGQUIT, SIG_IGN);
-	main_loop(true, envp, NULL, NULL);
+	arr = flexible_arr();
+	if (!arr)
+		return (write(2, "ERROR, flexible_arr failed", 26), EXIT_FAILURE);
+	main_loop(arr, envp, NULL, NULL);
+	free_tokens(arr);
 	return (write(1, "exit\n", 5), EXIT_SUCCESS);
 }

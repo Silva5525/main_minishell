@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:17:58 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/14 20:03:43 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/20 16:12:25 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,20 +71,19 @@ void	alloc_envp(t_arr *arr, char **envp)
 
 	if (arr->first_time)
 	{
-		arr->envp = envp;
-		return ;
+		i = 0;
+		while (envp[i])
+			i++;
+		arr->envp = (char **)malloc(sizeof(char *) * (i + 1));
+		if (!arr->envp)
+		{
+			write(2, "Error, malloc failed in alloc_envp\n", 35);
+			free_tokens(arr);
+			exit(EXIT_FAILURE);
+		}
+		envp_copy(arr, envp, i);
+		arr->first_time = false;
 	}
-	i = 0;
-	while (envp[i])
-		i++;
-	arr->envp = (char **)malloc(sizeof(char *) * (i + 1));
-	if (!arr->envp)
-	{
-		write(2, "Error, malloc failed in alloc_envp\n", 35);
-		free_tokens(arr);
-		exit(EXIT_FAILURE);
-	}
-	envp_copy(arr, envp, i);
 }
 
 /// @brief searches for a pipe in the tokens

@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:07:05 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/14 19:58:46 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/20 13:59:12 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static bool	ft_pwd(t_arr *arr)
 	char		**new_envp;
 
 	pwd = getcwd(NULL, 0);
-	oldpwd = getenv("PWD");
+	oldpwd = ft_getenv_val(arr->envp, "PWD");
 	if (!pwd)
 		return (write(2, "Error, getcwd failed in set_pwd\n", 32), false);
 	if (!oldpwd)
@@ -49,16 +49,20 @@ static bool	ft_pwd(t_arr *arr)
 /// current working directory to the value of the HOME environment variable.
 /// @param argv specifies the directory to change to
 /// @return true if successful, false otherwise
-static bool	ft_cd(char **argv)
+static bool	ft_cd(char **argv, t_arr *arr)
 {
+	char	*home;
+
 	if (!argv[1])
 	{
-		if (chdir(getenv("HOME")) == -1)
-			return (write(2, "Error, chdir failed in ft_cd\n", 29),
-				false);
+		home = ft_getenv_val(arr->envp, "HOME");
+		if (home == NULL)
+			return (write(2, "ERROR, chdir in ft_cd\n", 23), false);
+		if (chdir(home) == -1)
+			return (perror("cd"), false);
 	}
 	else if (chdir(argv[1]) == -1)
-		return (perror("cd"), false);
+		return (write(2, "ERROR, chdir in ft_cd\n", 23), false);
 	return (true);
 }
 
@@ -72,7 +76,7 @@ static void	split_b_cd(char **argv, size_t argc, t_arr *arr)
 	char		*new_direktory;
 
 	argv[argc] = NULL;
-	if (!ft_cd(argv))
+	if (!ft_cd(argv, arr))
 		write(2, "Error, ft_cd in b_cd failed\n", 28);
 	else if (!ft_pwd(arr))
 		write(2, "Error, ft_pwd in b_cd failed\n", 29);
