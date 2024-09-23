@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 20:44:12 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/20 16:13:39 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/20 18:46:01 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,34 +41,6 @@ void	reset_arr(t_arr *arr)
 	arr->size = 0;
 	arr->max_size = 16;
 }
-
-// void	free_main_loop(t_arr *arr)
-// {
-// 	size_t	i;
-
-// 	i = 0;
-// 	if (!arr)
-// 		return ;
-// 	if (arr->ken)
-// 	{
-// 		while (i < arr->size)
-// 		{
-// 			if (arr->ken[i])
-// 			{
-// 				if (arr->ken[i]->str)
-// 				{
-// 					free(arr->ken[i]->str);
-// 					arr->ken[i]->str = NULL;
-// 				}
-// 				free(arr->ken[i]);
-// 				arr->ken[i] = NULL;
-// 			}
-// 			i++;
-// 		}
-// 		free(arr->ken);
-// 		arr->ken = NULL;
-// 	}
-// }
 
 void	unclosed_quotes_handler(char *hold, char *read)
 {

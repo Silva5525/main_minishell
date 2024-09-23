@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/20 16:17:20 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/23 13:27:14 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,22 +23,22 @@
 /// @param read the input readet from the readline.
 /// @param envp the environment variables.
 /// @param first_time bool if true envp will be set to the envp (leak handling)
-void	main_process(char *read, char **envp, bool first_time, t_arr *arr)
+int	main_process(char *read, char **envp, bool first_time, t_arr *arr)
 {
 	char	*expand_r;
 
 	if (!arr)
-		return ;
+		return (EXIT_FAILURE);
 	add_history(read);
 	expand_r = expanding_env(read, envp, arr);
+	if (!expand_r)
+		return (free(read), write(
+				2, "Error, expanding_env in main_process\n", 37), EXIT_FAILURE);
 	to_ken_producer(expand_r, arr);
 	free(expand_r);
 	if (!arr)
-	{
-		free(read);
-		write(2, "Error, to_ken_producer in main_process\n", 39);
-		return ;
-	}
+		return (free(read), write(2,
+				"Error, to_ken_producer in main_process\n", 39), EXIT_FAILURE);
 	arr->first_time = first_time;
 	alloc_envp(arr, envp);
 	if (pipe_search(arr))
@@ -46,6 +46,7 @@ void	main_process(char *read, char **envp, bool first_time, t_arr *arr)
 	else
 		redir(arr);
 	free(read);
+	return (EXIT_SUCCESS);
 }
 
 /// @brief saves the current working directory to the out string
@@ -96,11 +97,8 @@ char	*direktory_minishell(void)
 	return (direktory_minishell2(pwd, out));
 }
 
-int	main_loop(t_arr *arr, char **envp, char *read, char *pwd)
+int	main_loop(t_arr *arr, char *read, char *pwd)
 {
-	bool	first_time;
-
-	first_time = true;
 	while (1)
 	{
 		pwd = direktory_minishell();
@@ -114,11 +112,10 @@ int	main_loop(t_arr *arr, char **envp, char *read, char *pwd)
 		if (has_open_quotes(read))
 			unclosed_quotes_handler(NULL, read);
 		if (is_env_token(read))
-			env_assign(read, &envp);
+			env_assign(read, &(arr->envp));
 		else
-			main_process(read, envp, first_time, arr);
+			main_process(read, arr->envp, arr->first_time, arr);
 		reset_arr(arr);
-		first_time = false;
 	}
 }
 
@@ -138,7 +135,8 @@ int	main(int argc, char **argv, char **envp)
 	arr = flexible_arr();
 	if (!arr)
 		return (write(2, "ERROR, flexible_arr failed", 26), EXIT_FAILURE);
-	main_loop(arr, envp, NULL, NULL);
+	alloc_envp(arr, envp);
+	main_loop(arr, NULL, NULL);
 	free_tokens(arr);
 	return (write(1, "exit\n", 5), EXIT_SUCCESS);
 }
