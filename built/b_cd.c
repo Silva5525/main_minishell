@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:07:05 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/20 13:59:12 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/23 16:16:02 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,39 @@ static bool	ft_pwd(t_arr *arr)
 	return (true);
 }
 
+/// @brief handles cd - and cd ~ commands and changes the current working
+/// directory to the directory specified in the argument. If no argument is
+/// given, it changes the current working directory to the value of the HOME
+/// environment variable.
+/// @param arr holds all data of the shell
+/// @return true if successful, false otherwise
+bool	cd_minus_tilde(char **argv, t_arr *arr, char *pwd, char *home)
+{
+	if (strcmp(argv[1], "-") == 0)
+	{
+		pwd = ft_getenv_val(arr->envp, "OLDPWD");
+		if (!pwd)
+			return (write(2, "Error, ft_geten failed in 2ft_cd\n", 33), false);
+		if (chdir(pwd) == -1)
+			return (write(2, "Error, chdir failed in 2ft_cd\n", 30), false);
+		printf("%s\n", pwd);
+	}
+	else if (argv[1][0] == '~' )
+	{
+		home = ft_getenv_val(arr->envp, "HOME");
+		if (!home)
+			return (write(2, "ERROR, ft_getenv in 2ft_cd\n", 27), false);
+		pwd = ft_strjoin(home, argv[1] + 1);
+		if (!pwd)
+			return (write(2, "ERROR, ft_strjoin in 2ft_cd\n", 28), false);
+		printf("%s\n", pwd);
+		if (chdir(pwd) == -1)
+			return (free(pwd), write(2, "ERROR, chdir in 2ft_cd\n", 23), false);
+		free(pwd);
+	}
+	return (true);
+}
+
 /// @brief ft cd changes the current working directory to the directory
 /// specified in the argument. If no argument is given, it changes the
 /// current working directory to the value of the HOME environment variable.
@@ -56,13 +89,15 @@ static bool	ft_cd(char **argv, t_arr *arr)
 	if (!argv[1])
 	{
 		home = ft_getenv_val(arr->envp, "HOME");
-		if (home == NULL)
-			return (write(2, "ERROR, chdir in ft_cd\n", 23), false);
+		if (!home)
+			return (write(2, "ERROR, ft_getenv in ft_cd\n", 26), false);
 		if (chdir(home) == -1)
-			return (perror("cd"), false);
+			return (write(2, "ERROR, chdir in 1ft_cd\n", 23), false);
 	}
+	else if (argv[1][0] == '~' || strcmp(argv[1], "-") == 0)
+		return (cd_minus_tilde(argv, arr, NULL, NULL));
 	else if (chdir(argv[1]) == -1)
-		return (write(2, "ERROR, chdir in ft_cd\n", 23), false);
+		return (write(2, "ERROR, chdir in 3ft_cd\n", 23), false);
 	return (true);
 }
 
