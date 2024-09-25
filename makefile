@@ -6,7 +6,7 @@
 #    By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/05 15:45:34 by wdegraf           #+#    #+#              #
-#    Updated: 2024/09/16 20:45:07 by wdegraf          ###   ########.fr        #
+#    Updated: 2024/09/24 11:35:30 by wdegraf          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,8 @@ SRCS := main.c lexer.c expand.c piping.c redir.c \
 		built/b_pwd.c built/a_builtins.c built/b_exit.c built/b_env.c \
 		built/b_unset.c open_quotes.c mini_helper.c \
 		free_tokens.c built/ft_arr_setenv.c manage_token.c \
-		tokenize.c pipe_ex.c execute.c mini_helper2.c
+		tokenize.c pipe_ex.c execute.c mini_helper2.c \
+		error.c
 OBJS	:= ${SRCS:.c=.o}
 
 all: libft $(NAME)

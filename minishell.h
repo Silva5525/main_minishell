@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:52:57 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/20 17:06:30 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/25 22:01:37 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,14 @@ typedef struct s_tokens
 /// @param max_size maximum number of tokens before resizing arr
 /// @param in_fd file descriptor for input
 /// @param out_fd file descriptor for output
+/// @param stat status of the last command
 /// @param first_time if true envp will be set to the envp (leak handling)
+/// @param stdin file descriptor for standard input (normally 0 in main_loop)
 typedef struct s_arr
 {
 	t_to	**ken;
 	char	**envp;
+	char	**hold;
 	char	*direktory;
 	size_t	size;
 	size_t	max_size;
@@ -57,6 +60,7 @@ typedef struct s_arr
 	int		out_fd;
 	int		stat;
 	bool	first_time;
+	int		stdin;
 }	t_arr;
 
 /// @brief struct for the built-in functions
@@ -84,8 +88,8 @@ void	b_exit(t_arr *arr);
 
 /// @param built/a_builtins.c
 
-void	builtin(t_arr *arr);
-void	command_not_found(void);
+int		builtin(t_arr *arr);
+void	command_not_found(t_arr *arr);
 
 /// @param built/ft_arr_setenv.c
 
@@ -119,6 +123,7 @@ void	free_doller_question(char *first, char *last, char *stat_str, bool er);
 /// @param redir.c
 
 void	redir(t_arr *arr);
+void	remove_redir_token(t_arr *arr, size_t i);
 
 /// @param piping.c
 
@@ -145,8 +150,9 @@ void	out_error(t_arr *arr, char ***order_exit);
 /// @param mini_helper2.c
 
 void	absolute_relative(t_arr *arr, char *order, char **args);
-void	reset_arr(t_arr *arr);
-void	unclosed_quotes_handler(char *hold, char *read);
+void	reset_arr(t_arr *arr, char *read);
+char	*direktory_minishell(void);
+char	**order_concate(t_arr *arr);
 
 /// @param manage_token.c
 
@@ -160,5 +166,10 @@ t_to	*list_token(char **val, int typ);
 void	ex_order(t_arr *arr);
 char	**path_dir(t_arr *arr);
 int		try_order(char *full_path, char **args, t_arr *arr);
+
+/// @param error.c
+
+void	error_free_exit(t_arr *arr, char *str);
+void	free_hold(t_arr *arr, size_t i);
 
 #endif

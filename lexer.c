@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 20:06:57 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/16 20:40:08 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/24 15:02:19 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,6 @@ void	to_ken_producer(const char *read, t_arr *arr)
 		}
 		handl_to_ken(&read, arr);
 	}
+	if (arr->size < arr->max_size)
+		arr->ken[arr->size] = NULL;
 }

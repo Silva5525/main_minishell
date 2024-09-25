@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:20:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/17 10:49:57 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/25 22:02:22 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	**path_dir(t_arr *arr)
 		}
 		i++;
 	}
-	if (!path)
+	if (!path || *path == '\0')
 		return (write(2, "Error, PATH not found with path_dir\n", 36), NULL);
 	dirs = ft_split(path, ':');
 	if (!dirs)
@@ -98,8 +98,12 @@ static int	find_to_ex(char *order, char **args, t_arr *arr)
 	char	*full_path;
 	size_t	i;
 
+	if (arr->ken[0] == NULL || arr->ken[0]->str[0] == NULL)
+		command_not_found(arr);
 	absolute_relative(arr, order, args);
 	dirs = path_dir(arr);
+	if (!dirs)
+		return (write(2, "ERROR, path_dir in find_to_ex.\n", 31), EXIT_FAILURE);
 	i = 0;
 	while (dirs && dirs[i])
 	{
@@ -126,21 +130,15 @@ void	ex_order(t_arr *arr)
 	pid_t	pid;
 	int		stat;
 
+	arr->hold = order_concate(arr);
+	error_free_exit(arr, "Error, order_concate in ex_order\n");
 	pid = fork();
 	if (pid < 0)
-	{
-		free_tokens(arr);
-		write(2, "Error, fork failed in ex_order\n", 31);
-		exit(EXIT_FAILURE);
-	}
+		error_free_exit(arr, "Error, fork in ex_order\n");
 	else if (pid == 0)
 	{
-		if (find_to_ex(arr->ken[0]->str[0], arr->ken[0]->str, arr) == -1)
-		{
-			free_tokens(arr);
-			command_not_found();
-			exit(EXIT_FAILURE);
-		}
+		if (find_to_ex(arr->ken[0]->str[0], arr->hold, arr) == -1)
+			command_not_found(arr);
 	}
 	else
 	{

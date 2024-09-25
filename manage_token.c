@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 19:02:33 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/23 10:54:38 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/25 21:46:40 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,19 +106,21 @@ t_arr	*flexible_arr(void)
 		return (write(2, "Error, flexible_arr malloc\n", 27), NULL);
 	arr->ken = malloc(sizeof(t_to) * 16);
 	if (!arr->ken)
-	{
-		free_tokens(arr);
-		write(2, "Error, flexible_arr malloc\n", 27);
-		return (NULL);
-	}
+		return (free_tokens(arr), write(2,
+				"Error, flexible_arr malloc\n", 27), NULL);
 	arr->size = 0;
 	arr->max_size = 16;
 	arr->direktory = NULL;
 	arr->envp = NULL;
+	arr->hold = NULL;
 	arr->in_fd = STDIN_FILENO;
 	arr->out_fd = STDOUT_FILENO;
 	arr->stat = 0;
 	arr->first_time = true;
+	arr->stdin = dup(STDIN_FILENO);
+	if (arr->stdin < 0)
+		return (free_tokens(arr), write(2,
+				"Error, dup fail in flexible_arr\n", 32), NULL);
 	return (arr);
 }
 

@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/23 13:27:14 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/25 22:03:28 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,52 +49,34 @@ int	main_process(char *read, char **envp, bool first_time, t_arr *arr)
 	return (EXIT_SUCCESS);
 }
 
-/// @brief saves the current working directory to the out string
-/// and adds " minishell$ " to the end of the string.
-/// @param pwd the current working directory.
-/// @param out becoms the prompt string for the minishell.
-char	*direktory_minishell2(char *pwd, char *out)
+/// @brief helper function of the main_loop function.
+/// @param arr all information about the minishell.
+/// @param read the input read from the readline.
+void	reset_arr(t_arr *arr, char *read)
 {
-	const char	*ms;
-	int			i;
-	int			j;
+	int		i;
+	char	*hold;
 
+	if (has_open_quotes(read))
+	{
+		hold = unclosed_quotes(read);
+		free(read);
+		read = hold;
+	}
+	if (is_env_token(read))
+		env_assign(read, &(arr->envp));
+	else
+		main_process(read, arr->envp, arr->first_time, arr);
+	free_ken_str(arr, 0, 0);
+	free_hold(arr, 0);
+	arr->ken = malloc(sizeof(t_to *) * 16);
+	if (!arr->ken)
+		error_free_exit(arr, "Error, realloc in reset_arr\n");
 	i = 0;
-	while (pwd[i] && i < PATH_MAX)
-	{
-		out[i] = pwd[i];
-		i++;
-	}
-	free(pwd);
-	ms = " minishell$ ";
-	j = 0;
-	while (ms[j] && i < PATH_MAX + 10)
-	{
-		out[i] = ms[j];
-		i++;
-		j++;
-	}
-	out[i] = '\0';
-	return (out);
-}
-
-/// @brief direktory_minishell creates the prompt for the minishell
-/// it gets the current working directory with getcwd and adds
-/// " minishell$ " to the end of the string. so we allways know
-/// where we are in the shell.
-/// @return the prompt string for the minishell.
-char	*direktory_minishell(void)
-{
-	char		*pwd;
-	char		*out;
-
-	out = (char *)malloc(sizeof(char) * (PATH_MAX + 11));
-	if (!out)
-		return (write(2, "Error, malloc failed in main\n", 30), NULL);
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
-		return (write(2, "Error, getcwd failed in main\n", 30), NULL);
-	return (direktory_minishell2(pwd, out));
+	while (i < 16)
+		arr->ken[i++] = NULL;
+	arr->size = 0;
+	arr->max_size = 16;
 }
 
 int	main_loop(t_arr *arr, char *read, char *pwd)
@@ -108,15 +90,20 @@ int	main_loop(t_arr *arr, char *read, char *pwd)
 		read = readline(pwd);
 		free(pwd);
 		if (!read)
-			return (EXIT_SUCCESS);
-		if (has_open_quotes(read))
-			unclosed_quotes_handler(NULL, read);
-		if (is_env_token(read))
-			env_assign(read, &(arr->envp));
-		else
-			main_process(read, arr->envp, arr->first_time, arr);
-		reset_arr(arr);
+		{
+			if (isatty(STDIN_FILENO))
+				return (EXIT_SUCCESS);
+			else
+			{
+				if (dup2(arr->stdin, STDIN_FILENO) == -1)
+					return (write(2,
+							"Error, dup2 failed in main\n", 28), EXIT_FAILURE);
+				continue ;
+			}
+		}
+		reset_arr(arr, read);
 	}
+	return (EXIT_SUCCESS);
 }
 
 /// @brief 

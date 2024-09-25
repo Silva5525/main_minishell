@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:26:13 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/18 13:30:53 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/25 18:48:38 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,16 @@
 /// I use #include <errno.h> to get the error number
 /// @param ENOENT No such file or directory (POSIX.1) in errno.h
 /// @param EACCES Permission denied (POSIX.1) in errno.
-void	command_not_found(void)
+void	command_not_found(t_arr *arr)
 {
+	free_tokens(arr);
 	if (errno == ENOENT)
 		write(2, "Error, command not found\n", 25);
 	else if (errno == EACCES)
 		write(2, "Error, permission denied\n", 26);
 	else
 		write(2, "Error, in ex_order in builtins\n", 31);
+	exit(EXIT_FAILURE);
 }
 
 /// @brief is the handler for the built-in commands.
@@ -33,7 +35,7 @@ void	command_not_found(void)
 /// if the command is a built-in command, the corresponding function is called
 /// if the command is not a built-in command, the command is executed.
 /// @param arr holds all data of the minishell
-void	builtin(t_arr *arr)
+int	builtin(t_arr *arr)
 {
 	size_t	i;
 	t_b		built[8];
@@ -47,14 +49,14 @@ void	builtin(t_arr *arr)
 	built[6] = (t_b){"exit", b_exit};
 	built[7] = (t_b){NULL, NULL};
 	i = 0;
+	if (!arr->ken || !arr->ken[0] || !arr->ken[0]->str[0])
+		return (write(2, "Error, no command found\n", 24), EXIT_FAILURE);
 	while (built[i].name)
 	{
 		if (ft_strcmp(arr->ken[0]->str[0], built[i].name) == 0)
-		{
-			built[i].fun(arr);
-			return ;
-		}
+			return (built[i].fun(arr), EXIT_SUCCESS);
 		i++;
 	}
 	ex_order(arr);
+	return (EXIT_SUCCESS);
 }

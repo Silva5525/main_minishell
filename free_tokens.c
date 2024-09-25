@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:51:53 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/20 17:04:35 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/25 19:38:54 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,7 @@ void	free_tokens(t_arr *arr)
 		free(arr->direktory);
 		arr->direktory = NULL;
 	}
+	free_hold(arr, 0);
 	free_envp(arr, 0);
 	free_ken_str(arr, 0, 0);
 	free(arr);
