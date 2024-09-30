@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 14:58:42 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/25 22:05:53 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/29 17:13:53 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	in_redir(char *file, t_arr *arr)
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		error_free_exit(arr, "Error, open failed in in_redir\n");
-	if (dup2(fd, 0) < 0)
+	if (dup2(fd, STDIN_FILENO) < 0)
 	{
 		close(fd);
 		error_free_exit(arr, "Error, dup2 failed in in_redir\n");

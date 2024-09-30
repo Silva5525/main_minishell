@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:23:01 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/16 18:19:54 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/26 14:00:36 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*ft_build_f_path(char *path, char *name)
 	return (full_n);
 }
 
-// int	main(void)
+// int	main(void) /// test main
 // {
 // 	char	*path = "/bin";
 // 	char	*name = "lists";

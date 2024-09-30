@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:52:57 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/25 22:01:37 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/30 15:47:23 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,11 +145,10 @@ bool	pipe_search(t_arr *arr);
 void	envp_copy(t_arr *arr, char **envp, size_t i);
 void	alloc_envp(t_arr *arr, char **envp);
 void	read_signal(int sig);
-void	out_error(t_arr *arr, char ***order_exit);
+void	absolute_relative(t_arr *arr, char *order, char **args);
 
 /// @param mini_helper2.c
 
-void	absolute_relative(t_arr *arr, char *order, char **args);
 void	reset_arr(t_arr *arr, char *read);
 char	*direktory_minishell(void);
 char	**order_concate(t_arr *arr);
@@ -171,5 +170,6 @@ int		try_order(char *full_path, char **args, t_arr *arr);
 
 void	error_free_exit(t_arr *arr, char *str);
 void	free_hold(t_arr *arr, size_t i);
+void	out_error(t_arr *arr, char ***order_exit);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:17:58 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/23 10:50:16 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/30 15:48:08 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,7 @@ void	alloc_envp(t_arr *arr, char **envp)
 			i++;
 		arr->envp = (char **)malloc(sizeof(char *) * (i + 1));
 		if (!arr->envp)
-		{
-			write(2, "Error, malloc failed in alloc_envp\n", 35);
-			free_tokens(arr);
-			exit(EXIT_FAILURE);
-		}
+			error_free_exit(arr, "Error, malloc failed in alloc_envp\n");
 		envp_copy(arr, envp, i);
 		arr->first_time = false;
 	}
@@ -103,11 +99,19 @@ bool	pipe_search(t_arr *arr)
 	return (false);
 }
 
-/// @brief  just a helper for do_execve.. prints an error message and exits
-/// @param arr the struct with all data in minishell
-/// @param order_exit the order tripple pointer with all commands to be freed
-void	out_error(t_arr *arr, char ***order_exit)
+/// @brief checks if the command is an absolute or relative path.
+/// If the command is an absolute or relative path, the function attempts to
+/// execute the command at that path. If the command is not found in the
+/// directories listed in the PATH, the function returns EXIT_FAILURE.
+/// @param arr all information about the minishell.
+/// @param order the command to execute.
+/// @param args the arguments to the command.
+void	absolute_relative(t_arr *arr, char *order, char **args)
 {
-	write(2, "Error, path_dir or ft_build_f_path failed in do_execve\n", 55);
-	mini_exit(order_exit, arr);
+	if (order[0] == '/' || order[0] == '.')
+	{
+		try_order(order, args, arr);
+		return ;
+	}
+	return ;
 }

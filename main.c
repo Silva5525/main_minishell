@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/25 22:03:28 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/30 15:48:38 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ int	main_loop(t_arr *arr, char *read, char *pwd)
 	{
 		pwd = direktory_minishell();
 		if (!pwd)
-			return (write(2, "Error, direktory_minishell in main\n", 35)
-				, EXIT_FAILURE);
+			return (write(2, "Error, direktory_minishell in main\n", 35),
+				EXIT_FAILURE);
 		read = readline(pwd);
 		free(pwd);
 		if (!read)
@@ -98,6 +98,7 @@ int	main_loop(t_arr *arr, char *read, char *pwd)
 				if (dup2(arr->stdin, STDIN_FILENO) == -1)
 					return (write(2,
 							"Error, dup2 failed in main\n", 28), EXIT_FAILURE);
+				printf("\n");
 				continue ;
 			}
 		}

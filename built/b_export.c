@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:07:54 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/23 13:26:14 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/26 14:00:01 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,11 @@
 void	export_val_fail(char *new_val, t_arr *arr, int i)
 {
 	if (i == 1)
-	{
-		write(2, "Error, ft_strjoin failed in export_value\n", 40);
-		free_tokens(arr);
-		exit(EXIT_FAILURE);
-	}
+		error_free_exit(arr, "Error, strjoin failed in export_value\n");
 	if (i == 2)
 	{
-		write(2, "Error, malloc failed in export_value\n", 35);
 		free(new_val);
-		free_tokens(arr);
-		exit(EXIT_FAILURE);
+		error_free_exit(arr, "Error, malloc failed in export_value\n");
 	}
 }
 
@@ -94,19 +88,11 @@ static char	*string_name(t_arr *arr, size_t i)
 	char	*str;
 
 	if (!arr->ken[i]->str[0])
-	{
-		write(2, "Error, arr->ken[i]->str[0] in b_export\n", 38);
-		free_tokens(arr);
-		exit(EXIT_FAILURE);
-	}
+		error_free_exit(arr, "Error, ken str in b_export\n");
 	str = ft_strndup(arr->ken[i]->str[0],
 			ft_strchr(arr->ken[i]->str[0], '=') - arr->ken[i]->str[0]);
 	if (!str[0])
-	{
-		write(2, "Error, ft_strndup in b_export\n", 31);
-		free_tokens(arr);
-		exit(EXIT_FAILURE);
-	}
+		error_free_exit(arr, "Error, strndup in b_export\n");
 	return (str);
 }
 

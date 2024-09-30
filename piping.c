@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:02:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/15 20:10:49 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/26 13:55:54 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,8 @@ bool	loop_arg(t_arr *arr, char **order
 	{
 		order[k] = ft_strdup(arr->ken[hold]->str[0]);
 		if (!order[k])
-		{
-			write(2, "Error, ft_strdup failed in split_pipe_orders\n", 45);
-			return (false);
-		}
+			return (write(2, "Error, ft_strdup failed in split_pipe_orders\n",
+					45), false);
 		k++;
 		hold++;
 	}
@@ -107,11 +105,7 @@ char	***split_pipe_orders(t_arr *arr)
 	count++;
 	order = (char ***)malloc(sizeof(char **) * (count + 1));
 	if (!order)
-	{
-		write(2, "Error, malloc failed in split_pipe_orders\n", 42);
-		free_tokens(arr);
-		exit(EXIT_FAILURE);
-	}
+		error_free_exit(arr, "Error, malloc failed in split_pipe_orders\n");
 	split_pipe_orders_loop(arr, order, 0, 0);
 	order[count] = NULL;
 	return (order);

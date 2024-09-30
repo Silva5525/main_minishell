@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:20:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/25 22:02:22 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/30 14:35:59 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,8 @@ void	ex_order(t_arr *arr)
 	int		stat;
 
 	arr->hold = order_concate(arr);
-	error_free_exit(arr, "Error, order_concate in ex_order\n");
+	if (!arr->hold)
+		error_free_exit(arr, "Error, order_concate in ex_order\n");
 	pid = fork();
 	if (pid < 0)
 		error_free_exit(arr, "Error, fork in ex_order\n");

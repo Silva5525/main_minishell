@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 20:44:12 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/25 21:57:45 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/30 15:46:29 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,6 @@ char	*direktory_minishell2(char *pwd, char *out)
 	return (out);
 }
 
-/// @brief checks if the command is an absolute or relative path.
-/// If the command is an absolute or relative path, the function attempts to
-/// execute the command at that path. If the command is not found in the
-/// directories listed in the PATH, the function returns EXIT_FAILURE.
-/// @param arr all information about the minishell.
-/// @param order the command to execute.
-/// @param args the arguments to the command.
-void	absolute_relative(t_arr *arr, char *order, char **args)
-{
-	if (order[0] == '/' || order[0] == '.')
-	{
-		try_order(order, args, arr);
-		return ;
-	}
-	return ;
-}
-
 /// @brief direktory_minishell creates the prompt for the minishell
 /// it gets the current working directory with getcwd and adds
 /// " minishell$ " to the end of the string. so we allways know
@@ -87,7 +70,7 @@ void	remove_redir_token(t_arr *arr, size_t i)
 
 	j = 0;
 	if (arr->ken[i]->typ == '>' || arr->ken[i]->typ == 'A'
-		|| arr->ken[i]->typ == '<' || arr->ken[i]->typ == 'H') /// check which is realy needed..
+		|| arr->ken[i]->typ == '<' || arr->ken[i]->typ == 'H')
 	{
 		while (arr->ken[i]->str[j])
 		{
@@ -108,6 +91,29 @@ void	remove_redir_token(t_arr *arr, size_t i)
 	arr->size -= 2;
 }
 
+/// @brief counts the tokens without redirection tokens.
+/// @param arr 
+/// @param i 
+/// @return 
+size_t	count_without_redir(t_arr *arr, size_t i)
+{
+	while (arr->ken[i])
+	{
+		if (arr->ken[i]->typ == '>' || arr->ken[i]->typ == 'A'
+			|| arr->ken[i]->typ == '<' || arr->ken[i]->typ == 'H')
+		{
+			remove_redir_token(arr, i);
+			continue ;
+		}
+		i++;
+	}
+	return (i);
+}
+
+/// @brief  concates the command and the arguments to a new double pointer.
+/// witout the redirection tokens.
+/// @param arr the struct that holds all data.
+/// @return the new double pointer with the command and the arguments.
 char	**order_concate(t_arr *arr)
 {
 	size_t	i;
@@ -116,8 +122,7 @@ char	**order_concate(t_arr *arr)
 
 	i = 0;
 	j = 0;
-	while (arr->ken[i])
-		i++;
+	i = count_without_redir(arr, 0);
 	str = malloc(sizeof(char *) * (i + 1));
 	if (!str)
 		return (write(2, "Error, malloc in order_concate\n", 31), NULL);
@@ -125,7 +130,12 @@ char	**order_concate(t_arr *arr)
 	{
 		str[j] = ft_strdup(arr->ken[j]->str[0]);
 		if (!str[j])
+		{
+			while (j > 0)
+				free(str[j--]);
+			free(str);
 			return (write(2, "Error, ft_strdup in order_concate\n", 34), NULL);
+		}
 		j++;
 	}
 	str[j] = NULL;

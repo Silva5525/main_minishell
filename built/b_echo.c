@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:06:40 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/25 17:53:50 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/09/26 13:57:43 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,7 @@ void	echo_helper(char *joined_str, char *hold, bool minus_nl)
 void	joined_str_error(char *joined_str, t_arr *arr)
 {
 	if (!joined_str)
-	{
-		write(2, "Error, ft_strjoin_multiple in b_echo\n", 38);
-		free_tokens(arr);
-		exit(EXIT_FAILURE);
-	}
+		error_free_exit(arr, "Error, ft_strjoin_multiple in b_echo\n");
 }
 
 /// @brief handles the echo command. It prints the arguments to the terminal.
