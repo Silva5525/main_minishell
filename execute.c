@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:20:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/30 14:35:59 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/06 20:10:39 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,6 @@ static int	find_to_ex(char *order, char **args, t_arr *arr)
 	char	*full_path;
 	size_t	i;
 
-	if (arr->ken[0] == NULL || arr->ken[0]->str[0] == NULL)
-		command_not_found(arr);
 	absolute_relative(arr, order, args);
 	dirs = path_dir(arr);
 	if (!dirs)
@@ -114,6 +112,8 @@ static int	find_to_ex(char *order, char **args, t_arr *arr)
 		else
 			continue ;
 	}
+	if (!dirs[i])
+		write(2, "Error, command not found in find_to_ex\n", 39);
 	i = 0;
 	while (dirs[i])
 		free(dirs[i++]);

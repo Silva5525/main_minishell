@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:52:57 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/30 15:47:23 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/06 17:56:45 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct s_arr
 	int		stat;
 	bool	first_time;
 	int		stdin;
+	pid_t	pid;
 }	t_arr;
 
 /// @brief struct for the built-in functions
@@ -90,6 +91,10 @@ void	b_exit(t_arr *arr);
 
 int		builtin(t_arr *arr);
 void	command_not_found(t_arr *arr);
+
+/// @param built/b_echo.c
+
+char	*strip_quotes(const char *str);
 
 /// @param built/ft_arr_setenv.c
 
@@ -129,6 +134,7 @@ void	remove_redir_token(t_arr *arr, size_t i);
 
 void	do_pipe(t_arr *arr);
 void	mini_exit(char ***order, t_arr *arr);
+char	***split_pipe_orders(t_arr *arr);
 
 /// @param pipe_ex.c
 

@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 14:58:42 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/29 17:13:53 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/06 20:11:35 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	close_out_redir(int stdout, t_arr *arr, int fd)
 		error_free_exit(arr, "Error, dup2 fail in out_redir\n");
 	}
 	close(fd);
-	remove_redir_token(arr, arr->size - 2);
 	if (arr->ken && arr->ken[0] && arr->ken[0]->str[0])
 		builtin(arr);
 	else
@@ -130,12 +129,12 @@ void	redir(t_arr *arr)
 			in_redir(arr->ken[i + 1]->str[0], arr);
 		else if (arr->ken[i]->typ == '>')
 			out_redir(arr->ken[i + 1]->str[0], false, arr);
-		else if (arr->ken[i]->typ == '|')
-			do_pipe(arr);
 		else if (arr->ken[i]->typ == 'A')
 			out_redir(arr->ken[i + 1]->str[0], true, arr);
 		else if (arr->ken[i]->typ == 'H')
 			mini_heredoc(arr->ken[i + 1]->str[0], arr);
+		else if (arr->ken[i]->typ == '|')
+			do_pipe(arr);
 		i++;
 	}
 	builtin(arr);

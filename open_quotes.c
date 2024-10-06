@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 17:30:02 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/07 10:49:57 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/06 19:38:08 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ char	*unclosed_quotes(char *line)
 	char	*out;
 	char	*hold;
 
+	if (!has_open_quotes(line))
+		return (line);
 	out = ft_strdup(line);
 	if (!out)
 		return (NULL);
@@ -72,10 +74,7 @@ char	*unclosed_quotes(char *line)
 	{
 		new_line = readline("> ");
 		if (!new_line)
-		{
-			free(out);
-			return (NULL);
-		}
+			return (free(out), NULL);
 		hold = out;
 		out = join_line(hold, new_line);
 		free(hold);

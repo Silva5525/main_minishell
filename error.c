@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 11:27:11 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/30 15:45:59 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/06 20:03:56 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,42 @@ void	out_error(t_arr *arr, char ***order_exit)
 
 /// @brief frees the tokens, writes an error message to stderr and exits.
 /// i kill the process with SIGTERM to avoid zombies.. sometimes exit is 
-/// simply not enough. xD sry
+/// simply not enough. xD sry (especially if i unset the PATH it maks sense)
 /// @param arr needed for freeing
 void	error_free_exit(t_arr *arr, char *str)
 {
+	pid_t	pid;
+
+	pid = arr->pid;
 	free_tokens(arr);
 	if (!str)
 	{
 		write(1, "exit\n", 5);
+		kill(pid, SIGTERM);
 		exit(EXIT_SUCCESS);
 	}
 	perror(str);
+	kill(pid, SIGTERM);
 	exit(EXIT_FAILURE);
 }
+
+// /// @brief frees the tokens, writes an error message to stderr and exits.
+// /// @param arr needed for freeing
+// void	error_free_exit(t_arr *arr, char *str)
+// {
+// 	pid_t	pid;
+
+// 	pid = arr->pid;
+// 	(void)pid;
+// 	free_tokens(arr);
+// 	if (!str)
+// 	{
+// 		write(1, "exit\n", 5);
+// 		exit(EXIT_SUCCESS);
+// 	}
+// 	perror(str);
+// 	exit(EXIT_FAILURE);
+// }
 
 /// @brief frees the t_arr->hold and sets it to NULL.
 /// @param arr all data of the minishell.

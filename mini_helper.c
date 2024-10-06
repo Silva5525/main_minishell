@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:17:58 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/30 15:48:08 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/06 20:10:49 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,8 @@ bool	pipe_search(t_arr *arr)
 /// @param args the arguments to the command.
 void	absolute_relative(t_arr *arr, char *order, char **args)
 {
+	if (arr->ken[0] == NULL || arr->ken[0]->str[0] == NULL)
+		command_not_found(arr);
 	if (order[0] == '/' || order[0] == '.')
 	{
 		try_order(order, args, arr);

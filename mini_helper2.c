@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 20:44:12 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/30 15:46:29 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/03 15:47:10 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ void	remove_redir_token(t_arr *arr, size_t i)
 
 	j = 0;
 	if (arr->ken[i]->typ == '>' || arr->ken[i]->typ == 'A'
-		|| arr->ken[i]->typ == '<' || arr->ken[i]->typ == 'H')
+		|| arr->ken[i]->typ == '<' || arr->ken[i]->typ == 'H'
+		|| arr->ken[i]->typ == '|')
 	{
 		while (arr->ken[i]->str[j])
 		{
@@ -100,7 +101,8 @@ size_t	count_without_redir(t_arr *arr, size_t i)
 	while (arr->ken[i])
 	{
 		if (arr->ken[i]->typ == '>' || arr->ken[i]->typ == 'A'
-			|| arr->ken[i]->typ == '<' || arr->ken[i]->typ == 'H')
+			|| arr->ken[i]->typ == '<' || arr->ken[i]->typ == 'H'
+			|| arr->ken[i]->typ == '|')
 		{
 			remove_redir_token(arr, i);
 			continue ;

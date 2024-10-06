@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:06:40 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/26 13:57:43 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/06 20:08:46 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,25 @@ char	*strip_quotes(const char *str)
 {
 	size_t	len;
 	char	*new_str;
+	size_t	i;
+	size_t	j;
 
+	if (!str)
+		return (NULL);
+	i = 0;
+	j = 0;
 	len = strlen(str);
-	if ((str[0] == '\'' && str[len - 1] == '\'')
-		|| (str[0] == '"' && str[len - 1] == '"'))
+	new_str = (char *)malloc(len + 1);
+	if (!new_str)
+		return (NULL);
+	while (str[i])
 	{
-		new_str = malloc(len - 1);
-		if (!new_str)
-			return (NULL);
-		strncpy(new_str, str + 1, len - 2);
-		new_str[len - 2] = '\0';
-		return (new_str);
+		if (str[i] != '\'' && str[i] != '\"')
+			new_str[j++] = str[i];
+		i++;
 	}
-	return (strdup(str));
+	new_str[j] = '\0';
+	return (new_str);
 }
 
 /// @brief Strips quotes from the concantenated string, prints the string
@@ -54,24 +60,29 @@ char	*strip_quotes(const char *str)
 /// @param joined_str concantenated string to print.
 /// @param hold temporary pointer to the processed string without quotes.
 /// @param minus_nl flag to print a newline or not.
-void	echo_helper(char *joined_str, char *hold, bool minus_nl)
+int	echo_helper(char *joined_str, char *hold, bool minus_nl)
 {
 	if (joined_str && joined_str[strlen(joined_str) - 1] == ' ')
 		joined_str[strlen(joined_str) - 1] = '\0';
+	if (!joined_str)
+		return (write(2, "Error, ft_strjoin_multiple in b_echo\n", 38),
+			EXIT_FAILURE);
+	hold = unclosed_quotes(joined_str);
+	if (!hold)
+		return (write(2, "Error, unclosed_quotes in echo_helper\n", 38),
+			EXIT_FAILURE);
 	hold = strip_quotes(joined_str);
 	if (!hold)
-	{
-		write(2, "Error, strip_quotes in echo_helper\n", 35);
-		return ;
-	}
-	if (hold)
-		printf("%s", hold);
-	if (minus_nl == false)
+		return (write(2, "Error, strip_quotes in echo_helper\n", 35),
+			EXIT_FAILURE);
+	printf("%s", hold);
+	if (!minus_nl)
 		printf("\n");
 	if (joined_str)
 		free(joined_str);
 	if (hold)
 		free(hold);
+	return (EXIT_SUCCESS);
 }
 
 /// @brief if a error occurs in ft_strjoin_multiple in b_echo

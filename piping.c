@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:02:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/26 13:55:54 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/02 15:17:35 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,12 @@
 /// @param arr the struct with all the data to be freed.
 void	mini_exit(char ***order, t_arr *arr)
 {
+	pid_t	pid;
+
+	pid = arr->pid;
 	free_order(order);
 	free_tokens(arr);
+	kill(pid, SIGTERM);
 	exit(EXIT_FAILURE);
 }
 

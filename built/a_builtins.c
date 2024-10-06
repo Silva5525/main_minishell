@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:26:13 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/25 18:48:38 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/06 20:06:23 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,18 @@
 
 /// @brief writes an error message to the standard error output
 /// errno is a global variable that is set by system calls and some library
-///functions in the event of an error to indicate what went wrong.
+/// functions in the event of an error to indicate what went wrong.
 /// I use #include <errno.h> to get the error number
 /// @param ENOENT No such file or directory (POSIX.1) in errno.h
 /// @param EACCES Permission denied (POSIX.1) in errno.
 void	command_not_found(t_arr *arr)
 {
-	free_tokens(arr);
 	if (errno == ENOENT)
-		write(2, "Error, command not found\n", 25);
+		error_free_exit(arr, "Error, command not found\n");
 	else if (errno == EACCES)
-		write(2, "Error, permission denied\n", 26);
+		error_free_exit(arr, "Error, permission denied\n");
 	else
-		write(2, "Error, in ex_order in builtins\n", 31);
-	exit(EXIT_FAILURE);
+		error_free_exit(arr, "Error, in ex_order in builtins\n");
 }
 
 /// @brief is the handler for the built-in commands.
@@ -38,7 +36,7 @@ void	command_not_found(t_arr *arr)
 int	builtin(t_arr *arr)
 {
 	size_t	i;
-	t_b		built[8];
+	t_b		built[10];
 
 	built[0] = (t_b){"echo", b_echo};
 	built[1] = (t_b){"cd", b_cd};
@@ -47,10 +45,12 @@ int	builtin(t_arr *arr)
 	built[4] = (t_b){"unset", b_unset};
 	built[5] = (t_b){"env", b_env};
 	built[6] = (t_b){"exit", b_exit};
-	built[7] = (t_b){NULL, NULL};
+	built[7] = (t_b){"setenv", b_export};
+	built[8] = (t_b){"unsetenv", b_unset};
+	built[9] = (t_b){NULL, NULL};
 	i = 0;
 	if (!arr->ken || !arr->ken[0] || !arr->ken[0]->str[0])
-		return (write(2, "Error, no command found\n", 24), EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	while (built[i].name)
 	{
 		if (ft_strcmp(arr->ken[0]->str[0], built[i].name) == 0)

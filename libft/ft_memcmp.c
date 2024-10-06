@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 20:26:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/08/10 20:42:45 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/03 13:45:36 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,6 @@ int	ft_memcmp(const void *s1, const void *s2, size_t n)
 // 	unsigned int n = 4;
 // 	int result = ft_memcmp(s1, s2, n);	
 // 	printf("positiv s1 negativ s2: %i\n", result);
-// 	printf("test +s1 vs -s2:%d\n", ft_memcmp(s1, s2, n));
+// 	printf(" +s1 vs -s2:%d\n", ft_memcmp(s1, s2, n));
 // 	return 0;
 // }
