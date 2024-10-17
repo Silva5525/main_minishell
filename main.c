@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/06 19:13:51 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/17 16:19:09 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	main_process(char *read, char **envp, bool first_time, t_arr *arr)
 		return (free(read), write(
 				2, "Error, expanding_env in main_process\n", 37), EXIT_FAILURE);
 	to_ken_producer(expand_r, arr);
+	new_to_ken_producer(arr);
 	free(expand_r);
 	if (!arr)
 		return (free(read), write(2,
@@ -65,6 +66,7 @@ void	reset_arr(t_arr *arr, char *read)
 	else
 		main_process(read, arr->envp, arr->first_time, arr);
 	free_ken_str(arr, 0, 0);
+	free_seg(arr->seg);
 	free_hold(arr, 0);
 	arr->ken = malloc(sizeof(t_to *) * 16);
 	if (!arr->ken)

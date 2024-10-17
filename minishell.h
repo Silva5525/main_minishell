@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:52:57 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/06 17:56:45 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/17 22:43:02 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,20 +48,25 @@ typedef struct s_tokens
 /// @param stat status of the last command
 /// @param first_time if true envp will be set to the envp (leak handling)
 /// @param stdin file descriptor for standard input (normally 0 in main_loop)
+struct				s_arr;
+
 typedef struct s_arr
 {
-	t_to	**ken;
-	char	**envp;
-	char	**hold;
-	char	*direktory;
-	size_t	size;
-	size_t	max_size;
-	int		in_fd;
-	int		out_fd;
-	int		stat;
-	bool	first_time;
-	int		stdin;
-	pid_t	pid;
+	t_to			**ken;
+	char			**envp;
+	char			**hold;
+	char			*direktory;
+	size_t			size;
+	size_t			max_size;
+	int				in_fd;
+	int				out_fd;
+	int				stat;
+	bool			first_time;
+	int				stdin;
+	pid_t			pid;
+	size_t			seg_count;
+	struct s_arr	**seg;
+	struct s_arr	*arr;
 }	t_arr;
 
 /// @brief struct for the built-in functions
@@ -177,5 +182,10 @@ int		try_order(char *full_path, char **args, t_arr *arr);
 void	error_free_exit(t_arr *arr, char *str);
 void	free_hold(t_arr *arr, size_t i);
 void	out_error(t_arr *arr, char ***order_exit);
+
+void	new_to_ken_producer(t_arr *arr);
+void	free_seg(t_arr **seg);
+// void	only_redir(t_arr *arr);
+// bool	parent_built(const char *order);
 
 #endif

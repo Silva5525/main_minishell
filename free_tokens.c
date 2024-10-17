@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:51:53 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/25 19:38:54 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/17 22:44:15 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,12 @@ void	free_order(char ***order)
 /// @param i index of the t_arr->envp.
 void	free_envp(t_arr *arr, size_t i)
 {
+	if (!arr || !arr->envp)
+		return ;
 	if (!arr->first_time && arr->envp)
 	{
 		i = 0;
-		while (arr->envp[i])
+		while (arr->envp && arr->envp[i])
 		{
 			free(arr->envp[i]);
 			arr->envp[i] = NULL;
@@ -119,8 +121,12 @@ void	free_tokens(t_arr *arr)
 		free(arr->direktory);
 		arr->direktory = NULL;
 	}
-	free_hold(arr, 0);
-	free_envp(arr, 0);
-	free_ken_str(arr, 0, 0);
-	free(arr);
+	if (arr->hold)
+		free_hold(arr, 0);
+	if (arr->envp)
+		free_envp(arr, 0);
+	if (arr->ken)
+		free_ken_str(arr, 0, 0);
+	if (arr)
+		free(arr);
 }

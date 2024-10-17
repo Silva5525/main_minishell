@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 11:27:11 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/06 20:03:56 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/17 16:36:14 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	error_free_exit(t_arr *arr, char *str)
 	pid_t	pid;
 
 	pid = arr->pid;
+	free_seg(arr->seg);
 	free_tokens(arr);
 	if (!str)
 	{
