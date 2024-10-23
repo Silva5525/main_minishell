@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/17 16:19:09 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/23 16:33:18 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@
 int	main_process(char *read, char **envp, bool first_time, t_arr *arr)
 {
 	char	*expand_r;
+	bool	is_envp;
 
+	is_envp = false;
 	if (!arr)
 		return (EXIT_FAILURE);
 	add_history(read);
@@ -34,16 +36,19 @@ int	main_process(char *read, char **envp, bool first_time, t_arr *arr)
 	if (!expand_r)
 		return (free(read), write(
 				2, "Error, expanding_env in main_process\n", 37), EXIT_FAILURE);
+	is_envp = is_env_token(read);
 	to_ken_producer(expand_r, arr);
-	new_to_ken_producer(arr);
 	free(expand_r);
 	if (!arr)
-		return (free(read), write(2,
+		return (write(2,
 				"Error, to_ken_producer in main_process\n", 39), EXIT_FAILURE);
-	arr->first_time = first_time;
-	alloc_envp(arr, envp);
-	redir(arr);
+	if (is_envp)
+		env_assign(read, &(arr->envp));
 	free(read);
+	new_to_ken_producer(arr);
+	if (!is_envp)
+		ex_redir(arr->seg, arr);
+	arr->first_time = first_time;
 	return (EXIT_SUCCESS);
 }
 
@@ -61,13 +66,7 @@ void	reset_arr(t_arr *arr, char *read)
 		free(read);
 		read = hold;
 	}
-	if (is_env_token(read))
-		env_assign(read, &(arr->envp));
-	else
-		main_process(read, arr->envp, arr->first_time, arr);
-	free_ken_str(arr, 0, 0);
-	free_seg(arr->seg);
-	free_hold(arr, 0);
+	main_process(read, arr->envp, arr->first_time, arr);
 	arr->ken = malloc(sizeof(t_to *) * 16);
 	if (!arr->ken)
 		error_free_exit(arr, "Error, realloc in reset_arr\n");
@@ -135,6 +134,6 @@ int	main(int argc, char **argv, char **envp)
 		return (write(2, "ERROR, flexible_arr failed", 26), EXIT_FAILURE);
 	alloc_envp(arr, envp);
 	main_loop(arr, NULL, NULL);
-	free_tokens(arr);
+	error_free_exit(arr, NULL);
 	return (write(1, "exit\n", 5), EXIT_SUCCESS);
 }

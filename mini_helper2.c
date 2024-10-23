@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 20:44:12 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/03 15:47:10 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/22 21:50:02 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ void	remove_redir_token(t_arr *arr, size_t i)
 /// @return 
 size_t	count_without_redir(t_arr *arr, size_t i)
 {
-	while (arr->ken[i])
+	while (arr->ken[i] != NULL)
 	{
 		if (arr->ken[i]->typ == '>' || arr->ken[i]->typ == 'A'
 			|| arr->ken[i]->typ == '<' || arr->ken[i]->typ == 'H'
@@ -118,19 +118,16 @@ size_t	count_without_redir(t_arr *arr, size_t i)
 /// @return the new double pointer with the command and the arguments.
 char	**order_concate(t_arr *arr)
 {
-	size_t	i;
 	size_t	j;
 	char	**str;
 
-	i = 0;
 	j = 0;
-	i = count_without_redir(arr, 0);
-	str = malloc(sizeof(char *) * (i + 1));
+	str = malloc(sizeof(char *) * (arr->size + 1));
 	if (!str)
 		return (write(2, "Error, malloc in order_concate\n", 31), NULL);
-	while (j < i)
+	while (j < arr->size)
 	{
-		str[j] = ft_strdup(arr->ken[j]->str[0]);
+		str[j] = strip_quotes(arr->ken[j]->str[0]);
 		if (!str[j])
 		{
 			while (j > 0)

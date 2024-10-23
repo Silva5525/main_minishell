@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:17:58 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/06 20:10:49 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/21 19:50:25 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,23 +80,6 @@ void	alloc_envp(t_arr *arr, char **envp)
 		envp_copy(arr, envp, i);
 		arr->first_time = false;
 	}
-}
-
-/// @brief searches for a pipe in the tokens
-/// @param arr holds all data
-/// @return true if a pipe was found, else false
-bool	pipe_search(t_arr *arr)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < arr->size)
-	{
-		if (arr->ken[i]->typ == '|')
-			return (true);
-		i++;
-	}
-	return (false);
 }
 
 /// @brief checks if the command is an absolute or relative path.

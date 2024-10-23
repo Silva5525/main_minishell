@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:07:05 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/26 14:55:04 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/23 16:47:49 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static bool	ft_pwd(t_arr *arr)
 	if (!new_envp)
 		return (free(pwd),
 			write(2, "Error, setenv failed in set_pwd\n", 33), false);
-	arr->envp = new_envp;
+	arr->arr->envp = new_envp;
 	free(pwd);
 	return (true);
 }

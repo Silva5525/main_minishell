@@ -6,13 +6,14 @@
 #    By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/05 15:45:34 by wdegraf           #+#    #+#              #
-#    Updated: 2024/09/24 11:35:30 by wdegraf          ###   ########.fr        #
+#    Updated: 2024/10/23 17:12:54 by wdegraf          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	:= minishell
 CC		:= cc
 CFLAGS	:= -Wall -Werror -Wextra -g
+#-fsanitize=address
 #-Wunreachable-code
 #-g -fsanitize=address -Ofast 
 # valgrind --leak-check=full ./meinProgramm
@@ -29,7 +30,7 @@ SRCS := main.c lexer.c expand.c piping.c redir.c \
 		built/b_unset.c open_quotes.c mini_helper.c \
 		free_tokens.c built/ft_arr_setenv.c manage_token.c \
 		tokenize.c pipe_ex.c execute.c mini_helper2.c \
-		error.c
+		error.c  lexer_2.c
 OBJS	:= ${SRCS:.c=.o}
 
 all: libft $(NAME)

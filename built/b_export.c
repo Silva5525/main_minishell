@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:07:54 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/26 14:00:01 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/21 19:09:00 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,9 @@ void	export_val_fail(char *new_val, t_arr *arr, int i)
 /// @brief Helper function of export value. 
 /// If the environment variable is not found, it will be allocated and
 /// added to the environment variables.
+/// dont forget that arr here is in real one of the seg so..
+	// arr->envp = new_envp; is seg
+	// arr->arr->envp = new_envp; is arr xD
 /// @param new_envp the new environment variables.
 /// @param new_val the new value to be added.
 /// @param arr the struct that holds all data.
@@ -45,6 +48,7 @@ void	new_envp_export_val(char **new_envp, char *new_val,
 	new_envp[i] = new_val;
 	new_envp[i + 1] = NULL;
 	arr->envp = new_envp;
+	arr->arr->envp = new_envp;
 }
 
 /// @brief Adds or updates an environment variable with value.

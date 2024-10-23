@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:08:14 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/26 14:00:14 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/23 16:24:59 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,3 @@ void	b_unset(t_arr *arr)
 		i++;
 	}
 }
-
-// export TEST_VAR=test
-// env | grep TEST_VAR	// shows TEST_VAR=test
-// unset TEST_VAR
-// env | grep TEST_VAR	// shows nothing

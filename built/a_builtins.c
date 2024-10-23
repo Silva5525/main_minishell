@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:26:13 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/06 20:06:23 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/23 11:32:17 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	builtin(t_arr *arr)
 	built[8] = (t_b){"unsetenv", b_unset};
 	built[9] = (t_b){NULL, NULL};
 	i = 0;
-	if (!arr->ken || !arr->ken[0] || !arr->ken[0]->str[0])
+	if (!arr || !arr->ken || !arr->ken[0] || !arr->ken[0]->str[0])
 		return (EXIT_FAILURE);
 	while (built[i].name)
 	{
@@ -57,6 +57,5 @@ int	builtin(t_arr *arr)
 			return (built[i].fun(arr), EXIT_SUCCESS);
 		i++;
 	}
-	ex_order(arr);
-	return (EXIT_SUCCESS);
+	return (EXIT_FAILURE);
 }

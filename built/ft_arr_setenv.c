@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 18:28:56 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/23 11:35:44 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/23 09:02:17 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ char	*create_variable(const char *str, const char *v)
 	return (new);
 }
 
-/// @brief updates the envp array with the new variable.
+/// @brief updates the envp array with the new variable if neccassary.
+/// else it just adds the new variable to the array. 
 /// @param envp environment variables.
 /// @param new the new variable.
 /// @param i index of the variable.
@@ -107,5 +108,7 @@ char	**ft_arr_setenv(const char *str, const char *v
 	if (!new)
 		return (NULL);
 	envp = update_envp(envp, new, i, first_time);
+	if (!envp)
+		return (free(new), NULL);
 	return (envp);
 }

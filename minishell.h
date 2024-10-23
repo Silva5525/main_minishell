@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:52:57 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/17 22:43:02 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/23 17:31:15 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ typedef struct s_arr
 	size_t			seg_count;
 	struct s_arr	**seg;
 	struct s_arr	*arr;
+	bool			wait;
+	bool			redir;
 }	t_arr;
 
 /// @brief struct for the built-in functions
@@ -75,7 +77,7 @@ typedef struct s_arr
 /// if the command is not a built-in command, the command is executed.
 /// @param name the name of the built-in command
 /// @param fun the function of the built-in command
-typedef void	(*t_built_f)(t_arr *arr);
+typedef void		(*t_built_f)(t_arr *arr);
 typedef struct s_builtin
 {
 	char		*name;
@@ -132,18 +134,13 @@ void	free_doller_question(char *first, char *last, char *stat_str, bool er);
 
 /// @param redir.c
 
-void	redir(t_arr *arr);
 void	remove_redir_token(t_arr *arr, size_t i);
 
 /// @param piping.c
 
-void	do_pipe(t_arr *arr);
-void	mini_exit(char ***order, t_arr *arr);
-char	***split_pipe_orders(t_arr *arr);
-
 /// @param pipe_ex.c
 
-void	ex_pipe_order(char ***order, t_arr *arr);
+int		do_pipe(t_arr *arr, int in_fd, int is_last);
 
 /// @param open_quotes.c
 
@@ -152,7 +149,7 @@ bool	has_open_quotes(const char *line);
 
 /// @param mini_helper.c
 
-bool	pipe_search(t_arr *arr);
+// bool	pipe_search(t_arr *arr);
 void	envp_copy(t_arr *arr, char **envp, size_t i);
 void	alloc_envp(t_arr *arr, char **envp);
 void	read_signal(int sig);
@@ -181,11 +178,18 @@ int		try_order(char *full_path, char **args, t_arr *arr);
 
 void	error_free_exit(t_arr *arr, char *str);
 void	free_hold(t_arr *arr, size_t i);
-void	out_error(t_arr *arr, char ***order_exit);
 
 void	new_to_ken_producer(t_arr *arr);
-void	free_seg(t_arr **seg);
-// void	only_redir(t_arr *arr);
-// bool	parent_built(const char *order);
+void	free_seg(t_arr **seg, size_t j);
+void	ex_redir(t_arr **seg, t_arr *arr);
+void	free_tokens_seg(t_arr *arr);
+int		find_to_ex(char *order, char **args, t_arr *arr);
+
+/// @param redir.c
+
+void	redir_heardoc(t_arr *seg, t_arr *arr, const char *delimiter);
+void	redir_append(t_arr *seg, t_arr *arr, const char *file);
+void	redir_in(t_arr *seg, t_arr *arr, char *filename);
+void	redir_out(t_arr *seg, t_arr *arr, const char *file);
 
 #endif

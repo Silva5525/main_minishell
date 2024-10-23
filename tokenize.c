@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 18:27:22 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/24 14:48:47 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/21 11:33:58 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	env_assign(char *read, char ***envp)
 	if (!val)
 		return (free(key), write(2, "Error, env_assign ft_strdup\n", 29),
 			EXIT_FAILURE);
-	*envp = ft_arr_setenv(key, val, *envp, true);
+	*envp = ft_arr_setenv(key, val, *envp, false);
 	free(key);
 	free(val);
 	return (EXIT_SUCCESS);

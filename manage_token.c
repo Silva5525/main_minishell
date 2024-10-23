@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 19:02:33 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/17 12:03:08 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/23 12:24:40 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +113,13 @@ t_arr	*flexible_arr(void)
 	arr->out_fd = STDOUT_FILENO;
 	arr->stat = 0;
 	arr->first_time = true;
-	arr->stdin = dup(STDIN_FILENO);
 	arr->pid = getpid();
+	arr->seg_count = 0;
+	arr->seg = NULL;
+	arr->arr = NULL;
+	arr->wait = false;
+	arr->redir = false;
+	arr->stdin = dup(STDIN_FILENO);
 	if (arr->stdin < 0)
 		return (free_tokens(arr), write(2,
 				"Error, dup fail in flexible_arr\n", 32), NULL);
