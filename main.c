@@ -6,23 +6,12 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/23 16:33:18 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/01 12:44:05 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/// @brief the main process of the minishell.
-/// it startets with creating a flexible array, then it adds the
-/// input to the history. After that it expands the environment variables
-/// using expanding_env. Then it produces the tokens using to_ken_producer.
-/// After that it allocates the environment variables to the arr->envp.
-/// Redirects with redir and checks if there is a pipe in the tokens, if so
-/// it creates a pipe with do_pipe, else it executes the builtin command.
-/// At the end it frees the tokens and the input.
-/// @param read the input readet from the readline.
-/// @param envp the environment variables.
-/// @param first_time bool if true envp will be set to the envp (leak handling)
 int	main_process(char *read, char **envp, bool first_time, t_arr *arr)
 {
 	char	*expand_r;
@@ -104,7 +93,6 @@ int	main_loop(t_arr *arr, char *read, char *pwd)
 				if (dup2(arr->stdin, STDIN_FILENO) == -1)
 					return (write(2,
 							"Error, dup2 failed in main\n", 28), EXIT_FAILURE);
-				printf("\n");
 				continue ;
 			}
 		}
@@ -129,7 +117,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	signal(SIGINT, read_signal);
 	signal(SIGQUIT, SIG_IGN);
-	arr = flexible_arr();
+	arr = flexible_arr(NULL);
 	if (!arr)
 		return (write(2, "ERROR, flexible_arr failed", 26), EXIT_FAILURE);
 	alloc_envp(arr, envp);

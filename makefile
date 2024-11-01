@@ -6,13 +6,13 @@
 #    By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/05 15:45:34 by wdegraf           #+#    #+#              #
-#    Updated: 2024/10/23 17:12:54 by wdegraf          ###   ########.fr        #
+#    Updated: 2024/11/01 14:44:28 by wdegraf          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	:= minishell
 CC		:= cc
-CFLAGS	:= -Wall -Werror -Wextra -g
+CFLAGS	:= -Wall -Werror -Wextra -g -pthread
 #-fsanitize=address
 #-Wunreachable-code
 #-g -fsanitize=address -Ofast 
@@ -29,8 +29,8 @@ SRCS := main.c lexer.c expand.c piping.c redir.c \
 		built/b_pwd.c built/a_builtins.c built/b_exit.c built/b_env.c \
 		built/b_unset.c open_quotes.c mini_helper.c \
 		free_tokens.c built/ft_arr_setenv.c manage_token.c \
-		tokenize.c pipe_ex.c execute.c mini_helper2.c \
-		error.c  lexer_2.c
+		tokenize.c execute.c mini_helper2.c \
+		error.c lexer_2.c lexer_3.c lexer_4.c 
 OBJS	:= ${SRCS:.c=.o}
 
 all: libft $(NAME)

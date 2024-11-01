@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 19:02:33 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/23 12:24:40 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/01 12:28:40 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,10 +93,8 @@ void	catch_token(t_arr *arr, t_to *ken)
 /// tokens. If the allocation fails, the function will free the allocated
 /// memory and return an error message.
 /// @return the t_arr struct or NULL if the allocation fails.
-t_arr	*flexible_arr(void)
+t_arr	*flexible_arr(t_arr	*arr)
 {
-	t_arr	*arr;
-
 	arr = malloc(sizeof(t_arr));
 	if (!arr)
 		return (write(2, "Error, flexible_arr malloc\n", 27), NULL);
@@ -117,8 +115,6 @@ t_arr	*flexible_arr(void)
 	arr->seg_count = 0;
 	arr->seg = NULL;
 	arr->arr = NULL;
-	arr->wait = false;
-	arr->redir = false;
 	arr->stdin = dup(STDIN_FILENO);
 	if (arr->stdin < 0)
 		return (free_tokens(arr), write(2,

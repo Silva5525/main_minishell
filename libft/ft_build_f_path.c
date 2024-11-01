@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:23:01 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/26 14:00:36 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/25 16:58:52 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,15 @@ char	*ft_build_f_path(char *path, char *name)
 	char	*full_p;
 	char	*full_n;
 
+	if (!path || !name)
+		return (NULL);
 	full_p = ft_strjoin(path, "/");
 	if (!full_p)
 		return (NULL);
 	full_n = ft_strjoin(full_p, name);
 	free(full_p);
 	if (!full_n)
-		return (free(full_p), NULL);
+		return (NULL);
 	return (full_n);
 }
 

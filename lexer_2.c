@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:58:43 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/23 17:21:40 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/01 14:48:09 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,16 +32,14 @@ t_arr	*flexible_seg(t_arr *arr)
 	seg->direktory = arr->direktory;
 	seg->envp = arr->envp;
 	seg->hold = NULL;
-	seg->in_fd = arr->in_fd;
-	seg->out_fd = arr->out_fd;
+	seg->in_fd = STDIN_FILENO;
+	seg->out_fd = STDOUT_FILENO;
 	seg->stat = arr->stat;
 	seg->first_time = false;
 	seg->stdin = arr->stdin;
 	seg->pid = arr->pid;
 	seg->seg_count = arr->seg_count;
 	seg->seg = arr->seg;
-	seg->wait = false;
-	seg->redir = arr->redir;
 	seg->arr = arr;
 	return (seg);
 }
@@ -116,141 +114,4 @@ int	p_r(const char *str)
 		return (1);
 	else
 		return (0);
-}
-
-/// @brief counts the | and redirection tokens in the ken array.
-/// so we know how many segments we need to create.
-/// @param ken the array of tokens.
-/// @return the number of segments needed. at least 1.
-int	count_seg_for_ken(t_to **ken)
-{
-	int		seg_count;
-	int		pr;
-	size_t	i;
-
-	seg_count = 1;
-	i = 0;
-	while (ken[i] != NULL && ken[i]->str[0] != NULL)
-	{
-		pr = p_r(ken[i]->str[0]);
-		if (pr > 0)
-			seg_count++;
-		i++;
-	}
-	return (seg_count);
-}
-
-/// @brief creats a new segment and stores it in the segments array.
-/// @param seg the array of segments.
-/// @param arr the main minishell struct.
-/// @param seg_count the current segment count.
-void	create_new_seg(t_arr **seg, t_arr *arr, size_t seg_count)
-{
-	seg[seg_count] = flexible_seg(arr);
-	if (!seg[seg_count])
-		error_free_exit(arr, "Error, flexible_seg in create_new_seg\n");
-}
-
-/// @brief a producer that creates new segments for the minishell.
-/// @param arr it holds all the data of the minishell.
-/// we store the new segments in the arr->seg array.
-void	new_to_ken_producer(t_arr *arr)
-{
-	t_arr	**segments;
-	size_t	seg_count;
-	size_t	i;
-	size_t	j;
-	int		p_fd[2];
-
-	seg_count = 0;
-	i = 0;
-	j = count_seg_for_ken(arr->ken);
-	segments = (t_arr **)malloc(sizeof(t_arr *) * (j + 1));
-	if (!segments)
-		error_free_exit(arr, "Error, malloc in new_to_ken_producer\n");
-	create_new_seg(segments, arr, seg_count);
-	while (i < arr->size)
-	{
-		if ((arr->ken[i]->typ == '>'))
-		{
-			if (arr->ken[++i] == NULL || arr->ken[i]->str[0] == NULL)
-				error_free_exit(arr,
-					"Error: No delimiter specified after '<<'");
-			else
-			{
-				redir_out(segments[seg_count], arr, arr->ken[i]->str[0]);
-				arr->redir = true;
-				i++;
-			}
-			continue ;
-		}
-		else if ((arr->ken[i]->typ == 'A'))
-		{
-			if (arr->ken[++i] == NULL || arr->ken[i]->str[0] == NULL)
-				error_free_exit(arr,
-					"Error: No delimiter specified after '<<'");
-			else
-			{
-				redir_append(segments[seg_count], arr, arr->ken[i]->str[0]);
-				arr->redir = true;
-				i++;
-			}
-			continue ;
-		}
-		else if ((arr->ken[i]->typ == '<'))
-		{
-			if (arr->ken[++i] == NULL || arr->ken[i]->str[0] == NULL)
-				error_free_exit(arr,
-					"Error: No delimiter specified after '<<'");
-			else
-			{
-				redir_in(segments[seg_count], arr, arr->ken[i]->str[0]);
-				arr->redir = true;
-				i++;
-			}
-			continue ;
-		}
-		else if ((arr->ken[i]->typ == 'H'))
-		{
-			if (arr->ken[++i] == NULL || arr->ken[i]->str[0] == NULL)
-				error_free_exit(arr,
-					"Error: No delimiter specified after '<<'");
-			else
-			{
-				redir_heardoc(segments[seg_count], arr, arr->ken[i]->str[0]);
-				arr->redir = true;
-				i++;
-			}
-			continue ;
-		}
-		else if (arr->ken[i]->typ == '|')
-		{
-			if (pipe(p_fd) < 0)
-				error_free_exit(arr, "Error: Pipe failed");
-			if (segments[seg_count]->out_fd == STDOUT_FILENO)
-				segments[seg_count]->out_fd = p_fd[1];
-			else
-				close(p_fd[1]);
-			create_new_seg(segments, arr, ++seg_count);
-			if (segments[seg_count]->in_fd == STDIN_FILENO)
-				segments[seg_count]->in_fd = p_fd[0];
-			else
-				close(p_fd[0]);
-			i++;
-			arr->redir = false;
-			continue ;
-		}
-		else
-		{
-			add_token_to_seg(segments[seg_count], arr, i);
-			segments[seg_count]->size++;
-			segments[seg_count]->ken[segments[seg_count]->size] = NULL;
-			segments[seg_count]->seg_count = j;
-			i++;
-			continue ;
-		}
-	}
-	segments[seg_count + 1] = NULL;
-	arr->seg_count = seg_count;
-	arr->seg = segments;
 }

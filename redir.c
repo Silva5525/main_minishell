@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 14:58:42 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/23 16:50:39 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/10/27 15:44:01 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,7 @@ void	redir_out(t_arr *seg, t_arr *arr, const char *file)
 
 	fd = open(file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd < 0)
-	{
-		perror("Error opening file for redirection");
 		error_free_exit(arr, "Error, open failed in redir_out");
-	}
 	if (seg->out_fd != STDOUT_FILENO)
 		close(seg->out_fd);
 	seg->out_fd = fd;
@@ -43,10 +40,7 @@ void	redir_in(t_arr *seg, t_arr *arr, char *filename)
 
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
-	{
-		perror("Error: Could not open input file");
 		error_free_exit(arr, "Error, open failed in redir_in");
-	}
 	if (seg->in_fd != STDIN_FILENO)
 		close(seg->in_fd);
 	seg->in_fd = fd;
@@ -63,14 +57,10 @@ void	redir_append(t_arr *seg, t_arr *arr, const char *file)
 
 	fd = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
-	{
-		perror("Error opening file for append redirection");
 		error_free_exit(arr, "Failed to open file for append");
-	}
 	if (seg->out_fd != STDOUT_FILENO)
 		close(seg->out_fd);
 	seg->out_fd = fd;
-	printf("Append redirection set for file: %s, FD: %d\n", file, seg->out_fd);
 }
 
 /// @brief creates a here-document (<<) redirection.
@@ -86,10 +76,7 @@ void	redir_heardoc(t_arr *seg, t_arr *arr, const char *delimiter)
 	char	*l;
 
 	if (pipe(p_fd) < 0)
-	{
-		perror("Error: pipe failed in here-doc");
-		exit(EXIT_FAILURE);
-	}
+		error_free_exit(arr, "Error: Pipe failed in redir_heardoc");
 	while (1)
 	{
 		l = readline("> ");
@@ -107,5 +94,4 @@ void	redir_heardoc(t_arr *seg, t_arr *arr, const char *delimiter)
 	if (seg->in_fd != STDIN_FILENO)
 		close(seg->in_fd);
 	seg->in_fd = p_fd[0];
-	seg->pid = arr->pid;
 }

@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:51:53 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/23 17:31:02 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/01 12:32:40 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,11 +105,6 @@ void	free_ken_str(t_arr *arr, size_t i, size_t j)
 		}
 		i++;
 	}
-	if (arr->ken)
-	{
-		free(arr->ken);
-		arr->ken = NULL;
-	}
 }
 
 /// @brief frees the whole t_arr struct and all its members and sets them
@@ -130,6 +125,11 @@ void	free_tokens(t_arr *arr)
 		free_envp(arr, 0);
 	if (arr->arr->ken)
 		free_ken_str(arr, 0, 0);
+	if (arr->ken)
+	{
+		free(arr->ken);
+		arr->ken = NULL;
+	}
 	if (arr->arr)
 	{
 		free(arr->arr);

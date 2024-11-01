@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:20:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/23 16:04:52 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/01 12:26:27 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,79 +121,24 @@ int	find_to_ex(char *order, char **args, t_arr *arr)
 	return (EXIT_FAILURE);
 }
 
-/// @brief executes the command by forking a child process
-/// then using execve to execute the command in the child process
-/// and waits for the child process to finish
-/// @param arr holds all data of the minishell
+// /// @brief executes the command in a forked part of do_fork parent process
+// /// then using execve to execute the command in the child process
+// /// and is waitet in the parent process in do_fork.
+// /// @param arr holds all data of the minishell
 void	ex_order(t_arr *arr)
 {
-	pid_t	pid;
-	int		stat;
-	int		out_fd;
-	int		in_fd;
-
-	stat = 0;
-	out_fd = dup(STDOUT_FILENO);
-	in_fd = dup(STDIN_FILENO);
-	if (out_fd < 0 || in_fd < 0)
-		error_free_exit(arr, "Error, dup in ex_order\n");
-	if (arr->in_fd != STDIN_FILENO)
-	{
-		if (dup2(arr->in_fd, STDIN_FILENO) < 0)
-			error_free_exit(arr, "Error, 1dup2 in ex_order\n");
-	}
-	if (arr->out_fd != STDOUT_FILENO)
-	{
-		if (dup2(arr->out_fd, STDOUT_FILENO) < 0)
-			error_free_exit(arr, "Error, 2dup2 in ex_order\n");
-	}
+	arr->hold = order_concate(arr);
+	if (!arr->hold)
+		error_free_exit(arr, "Error, order_concate in ex_order\n");
 	if (builtin(arr) == EXIT_SUCCESS)
-	{
-		if (dup2(in_fd, STDIN_FILENO) < 0)
-			error_free_exit(arr, "Error, 3dup2 in ex_order\n");
-		if (dup2(out_fd, STDOUT_FILENO) < 0)
-			error_free_exit(arr, "Error, 4dup2 in ex_order\n");
-		close(in_fd);
-		close(out_fd);
-		if (arr->in_fd != STDIN_FILENO)
-			close(arr->in_fd);
-		if (arr->out_fd != STDOUT_FILENO)
-			close(arr->out_fd);
 		return ;
-	}
-	pid = fork();
-	if (pid < 0)
-		error_free_exit(arr, "Error, fork in ex_order\n");
-	else if (pid == 0)
+	if (dup2(arr->in_fd, STDIN_FILENO) < 0)
+		error_free_exit(arr, "Error, input redirection in ex_order\n");
+	if (dup2(arr->out_fd, STDOUT_FILENO) < 0)
+		error_free_exit(arr, "Error, output redirection in ex_order\n");
+	if (find_to_ex(arr->ken[0]->str[0], arr->hold, arr) == -1)
 	{
-		if (arr->in_fd != STDIN_FILENO)
-		{
-			if (dup2(arr->in_fd, STDIN_FILENO) < 0)
-				error_free_exit(arr, "Error, 5dup2 in ex_order\n");
-			close(arr->in_fd);
-		}
-		if (arr->out_fd != STDOUT_FILENO)
-		{
-			if (dup2(arr->out_fd, STDOUT_FILENO) < 0)
-				error_free_exit(arr, "Error, 6dup2 in ex_order\n");
-			close(arr->out_fd);
-		}
-		if (find_to_ex(arr->ken[0]->str[0], arr->hold, arr) == -1)
-			command_not_found(arr);
+		command_not_found(arr);
 		exit(EXIT_FAILURE);
-	}
-	else
-	{
-		waitpid(pid, &stat, 0);
-		if (WIFEXITED(stat))
-			arr->stat = WEXITSTATUS(stat);
-		else if (WIFSIGNALED(stat))
-			arr->stat = 128 + WTERMSIG(stat);
-		if (dup2(in_fd, STDIN_FILENO) < 0)
-			error_free_exit(arr, "Error, 7dup2 in ex_order\n");
-		if (dup2(out_fd, STDOUT_FILENO) < 0)
-			error_free_exit(arr, "Error, 8dup2 in ex_order\n");
-		close(in_fd);
-		close(out_fd);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:02:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/23 16:51:39 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/01 12:35:07 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,18 @@ static void	part_seg_free(t_arr *arr)
 	}
 	arr->seg_count = 0;
 	free_ken_str(arr, 0, 0);
+	if (arr->ken)
+	{
+		free(arr->ken);
+		arr->ken = NULL;
+	}
 	free_hold(arr, 0);
 }
 
 void	ex_redir(t_arr **seg, t_arr *arr)
 {
 	size_t	i;
-	int		in_fd;
-	int		is_last;
 
-	in_fd = STDIN_FILENO;
 	if (!seg || !seg[0])
 		return ;
 	i = 0;
@@ -42,21 +44,36 @@ void	ex_redir(t_arr **seg, t_arr *arr)
 	}
 	while (i < arr->seg_count + 1)
 	{
-		is_last = (i == arr->seg_count);
-		if (!arr->redir && arr->seg_count == 0)
+		if (arr->seg_count == 0)
 		{
 			if (builtin(seg[0]) == EXIT_SUCCESS)
 				i++;
-			arr->redir = true;
 			continue ;
 		}
 		else
-			do_pipe(seg[i], in_fd, is_last);
-		while (!seg[i]->wait)
-			usleep(100);
-		seg[i]->wait = false;
+			do_fork(seg[i]);
 		i++;
 	}
-	arr->redir = false;
 	part_seg_free(arr);
+}
+
+void	do_fork(t_arr *arr)
+{
+	pid_t	pid;
+	int		stat;
+
+	pid = fork();
+	if (pid < 0)
+		error_free_exit(arr, "Error, fork failed in do_fork\n");
+	else if (pid == 0)
+		ex_order(arr);
+	waitpid(pid, &stat, 0);
+	if (WIFEXITED(stat))
+		arr->stat = WEXITSTATUS(stat);
+	else if (WIFSIGNALED(stat))
+		arr->stat = 128 + WTERMSIG(stat);
+	if (arr->in_fd != STDIN_FILENO)
+		close(arr->in_fd);
+	if (arr->out_fd != STDOUT_FILENO)
+		close(arr->out_fd);
 }

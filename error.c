@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 11:27:11 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/23 17:31:54 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/01 12:32:30 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	error_free_exit(t_arr *arr, char *str)
 		kill(pid, SIGTERM);
 		exit(EXIT_SUCCESS);
 	}
-	perror(str);
 	kill(pid, SIGTERM);
 	exit(EXIT_FAILURE);
 }
@@ -73,6 +72,11 @@ void	free_tokens_seg(t_arr *arr)
 		free_hold(arr, 0);
 	if (arr->ken)
 		free_ken_str(arr, 0, 0);
+	if (arr->ken)
+	{
+		free(arr->ken);
+		arr->ken = NULL;
+	}
 	if (arr)
 	{
 		free(arr);
