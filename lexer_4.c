@@ -6,12 +6,20 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:42:16 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/01 14:48:22 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/01 15:25:46 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief handles the pipe redirection. Sets the file descriptor first for the
+/// first segment where the input is STDIN_FILENO. For the next segment the
+/// input file descriptor is the output file descriptor of the previous segment.
+/// For easier handling in do_fork and ex_order later.
+/// @param segments the array of segments.
+/// @param seg_count index of the current segment.
+/// @param arr the main minishell struct.
+/// @return 
 bool	seg_pipe(t_arr **segments, size_t *seg_count, t_arr *arr)
 {
 	int		p_fd[2];
@@ -30,6 +38,10 @@ bool	seg_pipe(t_arr **segments, size_t *seg_count, t_arr *arr)
 	return (true);
 }
 
+/// @brief ads a token to the segment array.
+/// @param seg the actual segment.
+/// @param arr the main minishell struct.
+/// @param i the index of the token.
 void	token_add(t_arr *seg, t_arr *arr, size_t *i)
 {
 	add_token_to_seg(seg, arr, *i);
@@ -38,6 +50,13 @@ void	token_add(t_arr *seg, t_arr *arr, size_t *i)
 	(*i)++;
 }
 
+/// @brief the new segment producer loop which handles unlimited segments.
+/// redirects, pipes and normal tokens. saves it in the segments array.
+/// which will be saved in the main minishell struct t_arr  *arr. 
+/// each segment is its own version of t_arr *arr. (nested struct)
+/// @param segments each segment is a t_arr struct. 
+/// @param arr the main minishell struct.
+/// @param seg_count the index of the current segment. (starting by 0)
 void	new_producer_loop(t_arr **segments, t_arr *arr, size_t seg_count)
 {
 	size_t	i;

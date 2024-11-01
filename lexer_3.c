@@ -6,12 +6,17 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/09 20:01:12 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/01 14:46:28 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/01 15:19:40 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/// @brief starts redirection for redir_aout in the segments.
+/// @param arr the main minishell struct
+/// @param i the index of the token
+/// @param seg the segment we are currently working on
+/// @return true for the continue of the loop.
 bool	r_out(t_arr *arr, size_t *i, t_arr *seg)
 {
 	if (arr->ken[++(*i)] == NULL || arr->ken[*i]->str[0] == NULL)
@@ -24,6 +29,11 @@ bool	r_out(t_arr *arr, size_t *i, t_arr *seg)
 	return (true);
 }
 
+/// @brief starts redirection for redir_append in the segments.
+/// @param arr the main minishell struct
+/// @param i the index of the token
+/// @param seg the segment we are currently working on
+/// @return true for the continue of the loop.
 bool	r_append(t_arr *arr, size_t *i, t_arr *seg)
 {
 	if (arr->ken[++(*i)] == NULL || arr->ken[*i]->str[0] == NULL)
@@ -36,6 +46,11 @@ bool	r_append(t_arr *arr, size_t *i, t_arr *seg)
 	return (true);
 }
 
+/// @brief starts redirection for redir_in in the segments.
+/// @param arr the main minishell struct
+/// @param i the index of the token
+/// @param seg the segment we are currently working on
+/// @return true for the continue of the loop.
 bool	r_in(t_arr *arr, size_t *i, t_arr *seg)
 {
 	if (arr->ken[++(*i)] == NULL || arr->ken[*i]->str[0] == NULL)
@@ -48,6 +63,11 @@ bool	r_in(t_arr *arr, size_t *i, t_arr *seg)
 	return (true);
 }
 
+/// @brief starts redirection for the heredoc in the segments.
+/// @param arr the main minishell struct
+/// @param i the index of the token
+/// @param seg the segment we are currently working on
+/// @return true for the continue of the loop.
 bool	r_heardoc(t_arr *arr, size_t *i, t_arr *seg)
 {
 	if (arr->ken[++(*i)] == NULL || arr->ken[*i]->str[0] == NULL)

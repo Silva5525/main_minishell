@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:20:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/01 12:26:27 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/01 15:35:25 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,10 +121,11 @@ int	find_to_ex(char *order, char **args, t_arr *arr)
 	return (EXIT_FAILURE);
 }
 
-// /// @brief executes the command in a forked part of do_fork parent process
-// /// then using execve to execute the command in the child process
-// /// and is waitet in the parent process in do_fork.
-// /// @param arr holds all data of the minishell
+/// @brief mallocs space for a useable array of strings for execve.
+/// If its a pipe it uses dup2 to set the needet file descriptors.
+/// then executes the command with execve and if failed it will print
+/// an error message and exits the child process.
+/// @param arr the main minishell struct.
 void	ex_order(t_arr *arr)
 {
 	arr->hold = order_concate(arr);
