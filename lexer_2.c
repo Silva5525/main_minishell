@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:58:43 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/01 14:48:09 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/02 14:17:12 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ t_arr	*flexible_seg(t_arr *arr)
 {
 	t_arr	*seg;
 
-	if (!arr)
-		return (NULL);
 	seg = (t_arr *)malloc(sizeof(t_arr));
 	if (!seg)
 		error_free_exit(arr, "Error, malloc1 in flexible_seg\n");
@@ -38,6 +36,7 @@ t_arr	*flexible_seg(t_arr *arr)
 	seg->first_time = false;
 	seg->stdin = arr->stdin;
 	seg->pid = arr->pid;
+	seg->redir = false;
 	seg->seg_count = arr->seg_count;
 	seg->seg = arr->seg;
 	seg->arr = arr;

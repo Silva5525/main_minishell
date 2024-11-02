@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:52:57 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/01 14:59:19 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/02 14:04:42 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <string.h>
 # include <signal.h>
 # include <limits.h>
-# include <linux/limits.h>
+// # include <linux/limits.h>
 # include <sys/wait.h>
 # include <stdbool.h>
 # include <readline/readline.h>
@@ -69,6 +69,7 @@ typedef struct s_arr
 	int				stdin;
 	pid_t			pid;
 	size_t			seg_count;
+	bool			redir;
 	struct s_arr	**seg;
 	struct s_arr	*arr;
 }	t_arr;

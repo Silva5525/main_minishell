@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:20:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/01 15:35:25 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/02 14:14:29 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,12 +131,14 @@ void	ex_order(t_arr *arr)
 	arr->hold = order_concate(arr);
 	if (!arr->hold)
 		error_free_exit(arr, "Error, order_concate in ex_order\n");
-	if (builtin(arr) == EXIT_SUCCESS)
-		return ;
+	printf("ex_order: arr->in_fd %d\n", arr->in_fd); // debug
+	printf("ex_order: arr->out_fd %d\n", arr->out_fd); // debug
 	if (dup2(arr->in_fd, STDIN_FILENO) < 0)
 		error_free_exit(arr, "Error, input redirection in ex_order\n");
 	if (dup2(arr->out_fd, STDOUT_FILENO) < 0)
 		error_free_exit(arr, "Error, output redirection in ex_order\n");
+	if (builtin(arr) == EXIT_SUCCESS)
+		exit(EXIT_SUCCESS);
 	if (find_to_ex(arr->ken[0]->str[0], arr->hold, arr) == -1)
 	{
 		command_not_found(arr);
