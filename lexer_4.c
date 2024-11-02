@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/01 14:42:16 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/02 14:17:58 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/02 16:41:16 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,29 +60,22 @@ void	token_add(t_arr *seg, t_arr *arr, size_t *i)
 void	new_producer_loop(t_arr **segments, t_arr *arr, size_t seg_count)
 {
 	size_t	i;
-	bool	conti;
 
 	i = 0;
 	while (i < arr->size)
 	{
-		conti = false;
 		if (arr->ken[i]->typ == '>')
-			conti = r_out(arr, &i, segments[seg_count]);
+			arr->redir = r_out(arr, &i, segments[seg_count]);
 		else if (arr->ken[i]->typ == 'A')
-			conti = r_append(arr, &i, segments[seg_count]);
+			arr->redir = r_append(arr, &i, segments[seg_count]);
 		else if (arr->ken[i]->typ == '<')
-			conti = r_in(arr, &i, segments[seg_count]);
+			arr->redir = r_in(arr, &i, segments[seg_count]);
 		else if (arr->ken[i]->typ == 'H')
-			conti = r_heardoc(arr, &i, segments[seg_count]);
+			arr->redir = r_heardoc(arr, &i, segments[seg_count]);
 		else if (arr->ken[i]->typ == '|')
 		{
-			conti = seg_pipe(segments, &seg_count, arr);
+			arr->redir = seg_pipe(segments, &seg_count, arr);
 			i++;
-		}
-		else if (conti == true)
-		{
-			arr->redir = true;
-			continue ;
 		}
 		else
 			token_add(segments[seg_count], arr, &i);

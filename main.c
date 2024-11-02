@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/01 15:16:14 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/02 16:30:41 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 /// @brief adds the input to the history. handles the environment variables
 /// and the tokens. If the input is an environment variable it will be assigned
-/// to the environment variables. After that it will produce the tokens and if needet
-/// the segments and starts redirection, pipes and the execution of the commands.
+/// to the environment variables. After that it will produce tokens if needet
+/// the segments and starts redirection, pipes the execution of the commands.
 /// @param read the input from the readline.
 /// @param envp the copied envirement variables.
 /// @param first_time bool to check if the shell just startet.
