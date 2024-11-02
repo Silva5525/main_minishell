@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/12 14:58:42 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/02 14:12:43 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/02 14:58:01 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	redir_out(t_arr *seg, t_arr *arr, const char *file)
 		error_free_exit(arr, "Error, open failed in redir_out");
 	if (seg->out_fd != STDOUT_FILENO)
 		close(seg->out_fd);
-	printf("redir_out fd: %d\n", fd); // debug
 	seg->out_fd = fd;
 }
 
@@ -44,7 +43,6 @@ void	redir_in(t_arr *seg, t_arr *arr, char *filename)
 		error_free_exit(arr, "Error, open failed in redir_in");
 	if (seg->in_fd != STDIN_FILENO)
 		close(seg->in_fd);
-		printf("redir_out fd: %d\n", fd); // debug
 	seg->in_fd = fd;
 }
 

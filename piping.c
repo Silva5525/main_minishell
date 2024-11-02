@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:02:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/02 14:18:16 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/02 15:56:13 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,15 +76,16 @@ void	ex_redir(t_arr **seg, t_arr *arr)
 	}
 	while (i < arr->seg_count + 1)
 	{
-		printf("seg[%zu]->size: %zu\n", i, seg[i]->size); // debug
-		if (arr->seg_count == 0 && arr->redir == false)
-		{
-			if (builtin(seg[0]) == EXIT_SUCCESS)
-				i++;
-			arr->redir = true;
-			continue ;
-		}
-		else
+		// printf("seg[%zu]->size: %zu\n", i, seg[i]->size); // debug probably bulshit now
+		// if (arr->seg_count == 0 && arr->redir == false)
+		// {
+		// 	printf(" innner circel arr->size: %zu\n", arr->size); // debug
+		// 	if (builtin(seg[0]) == EXIT_SUCCESS)
+		// 		i++;
+		// 	arr->redir = true;
+		// 	continue ;
+		// }
+		// else
 			do_fork(seg[i]);
 		arr->redir = false;
 		i++;

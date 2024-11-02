@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 16:58:43 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/02 14:17:12 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/02 14:50:18 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,7 @@ int	update_quote_state(char c, int state)
 /// @return the number of pipes and redirection tokens in the string.
 int	p_r(const char *str)
 {
-	if (ft_strncmp(str, ">>", 2) == 0 || ft_strncmp(str, "<<", 2) == 0)
-		return (2);
-	else if (*str == '>' || *str == '<' || *str == '|')
+	if (*str == '|')
 		return (1);
 	else
 		return (0);
