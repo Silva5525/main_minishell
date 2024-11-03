@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:06:40 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/21 22:39:22 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/03 16:20:08 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,16 @@
 /// @return a bool if the flag is set
 bool	minus_newline(bool minus_nl, size_t *i, t_arr *arr)
 {
-	while (strncmp(arr->ken[*i]->str[0], "-n", 2) == 0)
+	int		j;
+
+	j = 0;
+	while (arr->ken[j]->str[0] && strncmp(arr->ken[*i]->str[0], "-n", 2) == 0)
 	{
 		minus_nl = true;
 		(*i)++;
+		j++;
+		if (j == 1)
+			break ;
 	}
 	return (minus_nl);
 }
@@ -65,8 +71,7 @@ int	echo_helper(char *joined_str, char *hold, bool minus_nl)
 	if (joined_str && joined_str[strlen(joined_str) - 1] == ' ')
 		joined_str[strlen(joined_str) - 1] = '\0';
 	if (!joined_str)
-		return (write(2, "Error, ft_strjoin_multiple in b_echo\n", 38),
-			EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	hold = unclosed_quotes(joined_str);
 	if (!hold)
 		return (write(2, "Error, unclosed_quotes in echo_helper\n", 38),
@@ -92,7 +97,7 @@ int	echo_helper(char *joined_str, char *hold, bool minus_nl)
 void	joined_str_error(char *joined_str, t_arr *arr)
 {
 	if (!joined_str)
-		error_free_exit(arr, "Error, ft_strjoin_multiple in b_echo\n");
+		error_free_exit(arr, NULL);
 }
 
 /// @brief handles the echo command. It prints the arguments to the terminal.

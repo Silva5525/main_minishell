@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:17:58 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/21 19:50:25 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/03 17:53:08 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ void	read_signal(int sig)
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
+	else if (sig == SIGTERM)
+		exit(EXIT_SUCCESS);
 }
 
 /// @brief copies the environment variables to the arr->envp

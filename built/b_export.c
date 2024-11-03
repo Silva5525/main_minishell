@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:07:54 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/21 19:09:00 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/03 17:07:05 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,13 +90,26 @@ static void	export_value(t_arr *arr, char *str, char *value)
 static char	*string_name(t_arr *arr, size_t i)
 {
 	char	*str;
+	size_t	j;
 
+	j = 0;
 	if (!arr->ken[i]->str[0])
 		error_free_exit(arr, "Error, ken str in b_export\n");
 	str = ft_strndup(arr->ken[i]->str[0],
 			ft_strchr(arr->ken[i]->str[0], '=') - arr->ken[i]->str[0]);
 	if (!str[0])
 		error_free_exit(arr, "Error, strndup in b_export\n");
+	while (arr->ken[i]->str[0][j] && arr->ken[i]->str[0][j] != '=')
+		j++;
+	if (arr->ken[i]->str[0][j] != '=')
+		return (free(str), NULL);
+	j = 0;
+	while (str[j])
+	{
+		if (!ft_isupper(str[j]) && str[j] != '_')
+			return (printf("why str %s \n", str), free(str), NULL);
+		j++;
+	}
 	return (str);
 }
 
@@ -118,6 +131,8 @@ void	b_export(t_arr *arr)
 	while (i < arr->size)
 	{
 		str = string_name(arr, i);
+		if (!str)
+			return ;
 		hold = ft_strchr(arr->ken[i]->str[0], '=');
 		if (hold)
 			export_value(arr, str, hold + 1);

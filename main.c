@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/02 16:30:41 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/03 17:54:41 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,11 +127,11 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	signal(SIGINT, read_signal);
 	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTERM, read_signal);
 	arr = flexible_arr(NULL);
 	if (!arr)
 		return (write(2, "ERROR, flexible_arr failed", 26), EXIT_FAILURE);
 	alloc_envp(arr, envp);
 	main_loop(arr, NULL, NULL);
 	error_free_exit(arr, NULL);
-	return (write(1, "exit\n", 5), EXIT_SUCCESS);
 }

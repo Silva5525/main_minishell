@@ -6,13 +6,13 @@
 #    By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/05 15:45:34 by wdegraf           #+#    #+#              #
-#    Updated: 2024/11/03 15:21:53 by wdegraf          ###   ########.fr        #
+#    Updated: 2024/11/03 16:11:42 by wdegraf          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	:= minishell
 CC		:= cc
-CFLAGS	:= -Wall -Werror -Wextra 
+CFLAGS	:= -Wall -Werror -Wextra -g -pthread -fsanitize=address
 #-g -pthread -fsanitize=address
 #-Wunreachable-code
 #-g -fsanitize=address -Ofast 
