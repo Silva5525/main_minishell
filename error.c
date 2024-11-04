@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 11:27:11 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/03 17:56:49 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/04 13:20:33 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ void	error_free_exit(t_arr *arr, char *str)
 	{
 		write(1, "exit\n", 5);
 		kill(pid, SIGTERM);
-		exit(EXIT_SUCCESS);
+		exit(arr->stat);
 	}
 	kill(pid, SIGTERM);
-	exit(EXIT_FAILURE);
+	exit(arr->stat);
 }
 
 /// @brief frees the t_arr->hold and sets it to NULL.

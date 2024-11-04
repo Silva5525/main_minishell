@@ -6,11 +6,14 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/03 17:54:41 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/04 13:19:13 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/// @brief  global variable for the exit status of the minishell.
+int		*g_sig_exit = 0;
 
 /// @brief adds the input to the history. handles the environment variables
 /// and the tokens. If the input is an environment variable it will be assigned
@@ -125,10 +128,12 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+
 	signal(SIGINT, read_signal);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGTERM, read_signal);
 	arr = flexible_arr(NULL);
+	g_sig_exit = &arr->stat;
 	if (!arr)
 		return (write(2, "ERROR, flexible_arr failed", 26), EXIT_FAILURE);
 	alloc_envp(arr, envp);

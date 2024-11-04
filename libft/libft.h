@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 14:13:48 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/18 13:28:08 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/04 13:07:32 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,5 +112,6 @@ char	*ft_strcat(char *dst, const char *src);
 char	*ft_strjoin_multiple(char *hold, char *next);
 char	*ft_build_f_path(char *path, char *name);
 int		ft_isupper(int c);
+bool	ft_isnumeric(const char *str);
 
 #endif
