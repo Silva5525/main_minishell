@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/04 16:50:36 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/04 18:49:02 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int	main_loop(t_arr *arr, char *read, char *pwd)
 		}
 		else
 		{
-			write(1, "\033[1A\033[2K\r", 8);
+			ft_write_smite();
 			arr->stat = 0;
 			continue ;
 		}
