@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/04 18:49:02 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/04 20:14:29 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,7 @@ bool	reset_arr(t_arr *arr, char *read)
 		if (isatty(STDIN_FILENO))
 			return (false);
 		else
-		{
-			if (dup2(arr->stdin, STDIN_FILENO) == -1)
-				return (write(2,
-						"Error, dup2 failed in main\n", 28), false);
 			return (true);
-		}
 	}
 	if (has_open_quotes(read))
 	{
@@ -114,7 +109,8 @@ int	main_loop(t_arr *arr, char *read, char *pwd)
 		}
 		read = readline(pwd);
 		free(pwd);
-		reset_arr(arr, read);
+		if (reset_arr(arr, read))
+			break ;
 	}
 	return (EXIT_SUCCESS);
 }
