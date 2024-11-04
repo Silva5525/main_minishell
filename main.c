@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/04 16:46:47 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/04 16:50:36 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,7 @@ bool	reset_arr(t_arr *arr, char *read)
 /// @brief the main loop of the minishell, it reads the input from the readline
 /// and sets the prompt to the current working directory. If the input is NULL
 /// it will exit the minishell. If the input is not NULL it will reset the
-/// array and the tokens and then it will start the main process.
-/// the if else is for the case that the minishell get interuptet so it reads
-/// the new and the write delets the one before.
+/// the if else prevents from double printing the prompt.
 /// the biger part of the loop is in the reset_arr function.
 /// @param arr holds all data of the minishell.
 /// @param read read from the readline.
