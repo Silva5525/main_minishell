@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:52:57 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/04 13:18:58 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/04 16:48:48 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # include "libft/libft.h"
 
 /// @brief global variable for the exit status of the minishell.
-extern int	*g_sig_exit;
+extern int			*g_sig_exit;
 
 /// @brief struct for the tokens
 /// @param str the token
@@ -84,6 +84,7 @@ typedef struct s_arr
 /// @param name the name of the built-in command
 /// @param fun the function of the built-in command
 typedef void		(*t_built_f)(t_arr *arr);
+
 typedef struct s_builtin
 {
 	char		*name;
@@ -136,7 +137,7 @@ void	envp_copy(t_arr *arr, char **envp, size_t i);
 void	alloc_envp(t_arr *arr, char **envp);
 void	read_signal(int sig);
 void	absolute_relative(t_arr *arr, char *order, char **args);
-void	reset_arr(t_arr *arr, char *read);
+bool	reset_arr(t_arr *arr, char *read);
 char	*direktory_minishell(void);
 char	**order_concate(t_arr *arr);
 char	*doller_question(char *str, int stat);
@@ -170,5 +171,6 @@ bool	seg_pipe(t_arr **segments, size_t *seg_count, t_arr *arr);
 void	create_new_seg(t_arr **seg, t_arr *arr, size_t seg_count);
 int		count_seg_for_ken(t_to **ken);
 int		p_r(const char *str);
+char	*status_check(t_arr *arr, char *pwd);
 
 #endif

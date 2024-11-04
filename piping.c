@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:02:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/02 16:42:53 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/04 15:21:10 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,11 @@ void	do_fork(t_arr *arr)
 	if (pid < 0)
 		error_free_exit(arr, "Error, fork failed in do_fork\n");
 	else if (pid == 0)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 		ex_order(arr);
+	}
 	waitpid(pid, &stat, 0);
 	if (WIFEXITED(stat))
 		arr->stat = WEXITSTATUS(stat);

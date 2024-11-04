@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/04 13:19:13 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/04 16:46:47 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,12 @@ int	main_process(char *read, char **envp, bool first_time, t_arr *arr)
 	add_history(read);
 	expand_r = expanding_env(read, envp, arr);
 	if (!expand_r)
-		return (free(read), write(
-				2, "Error, expanding_env in main_process\n", 37), EXIT_FAILURE);
+		return (free(read), write(2, "Error, 1 m_process\n", 19), EXIT_FAILURE);
 	is_envp = is_env_token(read);
 	to_ken_producer(expand_r, arr);
 	free(expand_r);
 	if (!arr)
-		return (write(2,
-				"Error, to_ken_producer in main_process\n", 39), EXIT_FAILURE);
+		return (write(2, "Error, 2 m_process\n", 19), EXIT_FAILURE);
 	if (is_envp)
 		env_assign(read, &(arr->envp));
 	free(read);
@@ -50,6 +48,8 @@ int	main_process(char *read, char **envp, bool first_time, t_arr *arr)
 	if (!is_envp)
 		ex_redir(arr->seg, arr);
 	arr->first_time = first_time;
+	arr->size = 0;
+	arr->max_size = 16;
 	return (EXIT_SUCCESS);
 }
 
@@ -57,11 +57,22 @@ int	main_process(char *read, char **envp, bool first_time, t_arr *arr)
 /// after it it refreshes the arr for the next input.
 /// @param arr all information about the minishell.
 /// @param read the input read from the readline.
-void	reset_arr(t_arr *arr, char *read)
+bool	reset_arr(t_arr *arr, char *read)
 {
-	int		i;
 	char	*hold;
 
+	if (!read)
+	{
+		if (isatty(STDIN_FILENO))
+			return (false);
+		else
+		{
+			if (dup2(arr->stdin, STDIN_FILENO) == -1)
+				return (write(2,
+						"Error, dup2 failed in main\n", 28), false);
+			return (true);
+		}
+	}
 	if (has_open_quotes(read))
 	{
 		hold = unclosed_quotes(read);
@@ -72,17 +83,16 @@ void	reset_arr(t_arr *arr, char *read)
 	arr->ken = malloc(sizeof(t_to *) * 16);
 	if (!arr->ken)
 		error_free_exit(arr, "Error, realloc in reset_arr\n");
-	i = 0;
-	while (i < 16)
-		arr->ken[i++] = NULL;
-	arr->size = 0;
-	arr->max_size = 16;
+	return (false);
 }
 
 /// @brief the main loop of the minishell, it reads the input from the readline
 /// and sets the prompt to the current working directory. If the input is NULL
 /// it will exit the minishell. If the input is not NULL it will reset the
 /// array and the tokens and then it will start the main process.
+/// the if else is for the case that the minishell get interuptet so it reads
+/// the new and the write delets the one before.
+/// the biger part of the loop is in the reset_arr function.
 /// @param arr holds all data of the minishell.
 /// @param read read from the readline.
 /// @param pwd path to the current working directory.
@@ -91,24 +101,21 @@ int	main_loop(t_arr *arr, char *read, char *pwd)
 {
 	while (1)
 	{
-		pwd = direktory_minishell();
-		if (!pwd)
-			return (write(2, "Error, direktory_minishell in main\n", 35),
-				EXIT_FAILURE);
+		if (arr->stat != 42)
+		{
+			pwd = direktory_minishell();
+			if (!pwd)
+				return (write(2, "Error, direktory_minishell in main\n", 35),
+					EXIT_FAILURE);
+		}
+		else
+		{
+			write(1, "\033[1A\033[2K\r", 8);
+			arr->stat = 0;
+			continue ;
+		}
 		read = readline(pwd);
 		free(pwd);
-		if (!read)
-		{
-			if (isatty(STDIN_FILENO))
-				return (EXIT_SUCCESS);
-			else
-			{
-				if (dup2(arr->stdin, STDIN_FILENO) == -1)
-					return (write(2,
-							"Error, dup2 failed in main\n", 28), EXIT_FAILURE);
-				continue ;
-			}
-		}
 		reset_arr(arr, read);
 	}
 	return (EXIT_SUCCESS);
@@ -128,14 +135,13 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-
 	signal(SIGINT, read_signal);
 	signal(SIGQUIT, SIG_IGN);
 	signal(SIGTERM, read_signal);
 	arr = flexible_arr(NULL);
-	g_sig_exit = &arr->stat;
 	if (!arr)
 		return (write(2, "ERROR, flexible_arr failed", 26), EXIT_FAILURE);
+	g_sig_exit = &arr->stat;
 	alloc_envp(arr, envp);
 	main_loop(arr, NULL, NULL);
 	error_free_exit(arr, NULL);

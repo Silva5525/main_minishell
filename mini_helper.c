@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:17:58 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/04 13:19:28 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/04 16:42:02 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	read_signal(int sig)
 {
 	if (sig == SIGINT)
 	{
+		*g_sig_exit = 42;
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
