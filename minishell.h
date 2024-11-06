@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:52:57 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/04 16:48:48 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/06 11:26:17 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # include "libft/libft.h"
 
 /// @brief global variable for the exit status of the minishell.
-extern int			*g_sig_exit;
+extern const int	*g_sig_exit;
 
 /// @brief struct for the tokens
 /// @param str the token

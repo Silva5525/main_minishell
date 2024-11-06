@@ -6,14 +6,14 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/04 20:14:29 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/06 11:23:07 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 /// @brief  global variable for the exit status of the minishell.
-int		*g_sig_exit = 0;
+const int		*g_sig_exit = 0;
 
 /// @brief adds the input to the history. handles the environment variables
 /// and the tokens. If the input is an environment variable it will be assigned
@@ -62,12 +62,7 @@ bool	reset_arr(t_arr *arr, char *read)
 	char	*hold;
 
 	if (!read)
-	{
-		if (isatty(STDIN_FILENO))
-			return (false);
-		else
-			return (true);
-	}
+		return (true);
 	if (has_open_quotes(read))
 	{
 		hold = unclosed_quotes(read);
@@ -82,8 +77,8 @@ bool	reset_arr(t_arr *arr, char *read)
 }
 
 /// @brief the main loop of the minishell, it reads the input from the readline
-/// and sets the prompt to the current working directory. If the input is NULL
-/// it will exit the minishell. If the input is not NULL it will reset the
+/// and sets the prompt to the current working directory. If the read is NULL
+/// it will exit the minishell. If the read is not NULL it will reset the
 /// the if else prevents from double printing the prompt.
 /// the biger part of the loop is in the reset_arr function.
 /// @param arr holds all data of the minishell.

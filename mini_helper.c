@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:17:58 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/04 16:42:02 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/06 11:24:55 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,20 @@
 
 /// @brief When user press Ctrl+C the input will be canceled
 /// and the shell will present a new prompt on a new line.
+/// @param g_sig_exit global variable for the exit status of the minishell.
+/// @param status the hold to trick the norm for global variables. xD sry
 /// @param sig if sig number is SIGINT it means you pressed Ctrl+C
 /// @rl_on_new_line() Prepare Readline to read the next input
 /// @rl_replace_line("", 0) clears the current line
 /// @rl_redisplay() redisplays the prompt on a cleared line
 void	read_signal(int sig)
 {
+	int	*status;
+
 	if (sig == SIGINT)
 	{
-		*g_sig_exit = 42;
+		status = (int *)g_sig_exit;
+		*status = 42;
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
