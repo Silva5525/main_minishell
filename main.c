@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/06 11:23:07 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/06 16:54:50 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,10 @@ bool	reset_arr(t_arr *arr, char *read)
 		free(read);
 		read = hold;
 	}
+	hold = strip_quotes(read);
+	free(read);
+	read = hold;
+	printf("read: %s\n", read);
 	main_process(read, arr->envp, arr->first_time, arr);
 	arr->ken = malloc(sizeof(t_to *) * 16);
 	if (!arr->ken)
@@ -89,7 +93,7 @@ int	main_loop(t_arr *arr, char *read, char *pwd)
 {
 	while (1)
 	{
-		if (arr->stat != 42)
+		if (arr->stat != SIGINT)
 		{
 			pwd = direktory_minishell();
 			if (!pwd)

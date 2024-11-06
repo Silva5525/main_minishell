@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/08 17:17:58 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/06 11:24:55 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/06 16:48:56 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ void	read_signal(int sig)
 	if (sig == SIGINT)
 	{
 		status = (int *)g_sig_exit;
-		*status = 42;
+		*status = sig;
 		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
 	}
 	else if (sig == SIGTERM)
-		exit(*g_sig_exit);
+		exit(EXIT_SUCCESS);
 }
 
 /// @brief copies the environment variables to the arr->envp

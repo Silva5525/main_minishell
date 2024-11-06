@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/24 11:27:11 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/04 13:20:33 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/06 16:47:57 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	error_free_exit(t_arr *arr, char *str)
 		kill(pid, SIGTERM);
 		exit(arr->stat);
 	}
+	write(2, str, ft_strlen(str));
 	kill(pid, SIGTERM);
 	exit(arr->stat);
 }

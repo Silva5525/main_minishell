@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:20:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/02 14:57:46 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/06 16:24:38 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ int	find_to_ex(char *order, char **args, t_arr *arr)
 	if (!dirs[i])
 		write(2, "Error, command not found in find_to_ex\n", 39);
 	i = 0;
+	arr->stat = 127;
 	while (dirs[i])
 		free(dirs[i++]);
 	free(dirs);
@@ -137,9 +138,5 @@ void	ex_order(t_arr *arr)
 		error_free_exit(arr, "Error, output redirection in ex_order\n");
 	if (builtin(arr) == EXIT_SUCCESS)
 		exit(EXIT_SUCCESS);
-	if (find_to_ex(arr->ken[0]->str[0], arr->hold, arr) == -1)
-	{
-		command_not_found(arr);
-		exit(EXIT_FAILURE);
-	}
+	find_to_ex(arr->ken[0]->str[0], arr->hold, arr);
 }
