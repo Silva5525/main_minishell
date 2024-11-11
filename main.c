@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 15:38:45 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/06 16:54:50 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/09 14:43:06 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int	main_process(char *read, char **envp, bool first_time, t_arr *arr)
 	is_envp = false;
 	if (!arr)
 		return (EXIT_FAILURE);
-	add_history(read);
 	expand_r = expanding_env(read, envp, arr);
 	if (!expand_r)
 		return (free(read), write(2, "Error, 1 m_process\n", 19), EXIT_FAILURE);
@@ -72,7 +71,6 @@ bool	reset_arr(t_arr *arr, char *read)
 	hold = strip_quotes(read);
 	free(read);
 	read = hold;
-	printf("read: %s\n", read);
 	main_process(read, arr->envp, arr->first_time, arr);
 	arr->ken = malloc(sizeof(t_to *) * 16);
 	if (!arr->ken)
@@ -108,6 +106,7 @@ int	main_loop(t_arr *arr, char *read, char *pwd)
 		}
 		read = readline(pwd);
 		free(pwd);
+		add_history(read);
 		if (reset_arr(arr, read))
 			break ;
 	}

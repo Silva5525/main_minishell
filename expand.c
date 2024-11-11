@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:42:54 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/23 13:28:03 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/11 09:59:22 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,8 @@ static char	*doller_search(char *str, char *hold, char **envp, char *out)
 		str = search;
 		doller = ft_strchr(str, '$');
 	}
-	return (hold);
+	out = ft_strjoin(hold, str);
+	return (out);
 }
 
 /// @brief expands the environment variables in the read string
