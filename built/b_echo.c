@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:06:40 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/11 10:44:41 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/11 11:41:54 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ bool	minus_newline(bool minus_nl, size_t *i, t_arr *arr)
 		if (j == 1)
 			break ;
 	}
-	while (strncmp(arr->ken[*i]->str[0], "-n", 2) == 0)
-		(*i)++;
 	return (minus_nl);
 }
 
@@ -133,4 +131,5 @@ void	b_echo(t_arr *arr)
 		i++;
 	}
 	echo_helper(joined_str, NULL, minus_nl);
+	arr->arr->stat = 0;
 }

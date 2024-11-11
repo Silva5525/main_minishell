@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:07:05 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/23 16:47:49 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/11 11:46:51 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,4 +155,5 @@ void	b_cd(t_arr *arr)
 	}
 	split_b_cd(argv, argc, arr);
 	free(argv);
+	arr->arr->stat = 0;
 }

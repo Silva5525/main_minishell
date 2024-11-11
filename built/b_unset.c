@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:08:14 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/23 16:24:59 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/11 11:47:25 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,4 +25,5 @@ void	b_unset(t_arr *arr)
 			error_free_exit(arr, "Error, unsetenv failed in b_unset\n");
 		i++;
 	}
+	arr->arr->stat = 0;
 }

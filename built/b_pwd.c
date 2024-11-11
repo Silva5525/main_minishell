@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:07:29 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/09/08 18:46:27 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/11 11:47:19 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,13 @@ void	b_pwd(t_arr *arr)
 	}
 	arr->direktory = getcwd(NULL, 0);
 	if (arr->direktory)
+	{
 		printf("%s\n", arr->direktory);
+		arr->arr->stat = 0;
+	}
 	else
+	{
 		write(2, "Error, b_pwd failed\n", 20);
+		arr->arr->stat = 1;
+	}
 }

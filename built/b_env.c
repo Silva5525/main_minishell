@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:08:46 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/10/21 10:44:00 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/11 11:47:03 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,4 +30,5 @@ void	b_env(t_arr *arr)
 		printf("%s\n", arr->envp[i]);
 		i++;
 	}
+	arr->arr->stat = 0;
 }

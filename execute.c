@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:20:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/11 10:47:19 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/11 10:59:24 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int	find_to_ex(char *order, char **args, t_arr *arr)
 	while (dirs[i])
 		free(dirs[i++]);
 	free(dirs);
-	return (EXIT_FAILURE);
+	return (arr->arr->stat = 127, EXIT_FAILURE);
 }
 
 /// @brief mallocs space for a useable array of strings for execve.
