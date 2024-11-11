@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:02:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/04 15:21:10 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/11 20:44:09 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,29 +37,42 @@ static void	part_seg_free(t_arr *arr)
 /// process to finish and sets the status of the last command. Closes
 /// the file descriptors if they are not the standard file descriptors.
 /// @param arr 
-void	do_fork(t_arr *arr)
+void	do_fork(t_arr *arr, pid_t *pid)
 {
-	pid_t	pid;
-	int		stat;
-
-	pid = fork();
-	if (pid < 0)
-		error_free_exit(arr, "Error, fork failed in do_fork\n");
-	else if (pid == 0)
+	if (*pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 		ex_order(arr);
 	}
+	if (arr->in_fd != STDIN_FILENO)
+		close(arr->in_fd);
+	if (arr->out_fd != STDOUT_FILENO)
+		close(arr->out_fd);
+}
+
+/// @brief waits for the child process to finish and sets the status of the last
+/// @param pid the process id of the child process.
+/// @param arr the main minishell struct.
+void	statuss_pid(pid_t pid, t_arr *arr, size_t i)
+{
+	int		stat;
+
+	i = 0;
+	// printf("pid: %d\n", pid); // debug 
 	waitpid(pid, &stat, 0);
 	if (WIFEXITED(stat))
 		arr->stat = WEXITSTATUS(stat);
 	else if (WIFSIGNALED(stat))
 		arr->stat = 128 + WTERMSIG(stat);
-	if (arr->in_fd != STDIN_FILENO)
-		close(arr->in_fd);
-	if (arr->out_fd != STDOUT_FILENO)
-		close(arr->out_fd);
+	while (i < arr->seg_count)
+	{
+		if (arr->seg[i]->in_fd != STDIN_FILENO)
+			close(arr->seg[i]->in_fd);
+		if (arr->seg[i]->out_fd != STDOUT_FILENO)
+			close(arr->seg[i]->out_fd);
+		i++;
+	}
 }
 
 /// @brief handles the command execution. If its a builtin command it will be
@@ -69,10 +82,12 @@ void	do_fork(t_arr *arr)
 void	ex_redir(t_arr **seg, t_arr *arr)
 {
 	size_t	i;
+	pid_t	*pid;
 
 	if (!seg || !seg[0])
 		return ;
 	i = 0;
+	pid = malloc(sizeof(pid_t) * (arr->seg_count + 1));
 	if (arr->size == 0)
 	{
 		part_seg_free(arr);
@@ -88,9 +103,21 @@ void	ex_redir(t_arr **seg, t_arr *arr)
 			continue ;
 		}
 		else
-			do_fork(seg[i]);
+		{
+			pid[i] = fork();
+			if (pid[i] == -1)
+				error_free_exit(arr, "Error, fork failed\n");
+			do_fork(seg[i], &pid[i]);
+		}
 		i++;
 	}
+	i = 0;
+	while (i < arr->seg_count + 1)
+	{
+		statuss_pid(pid[i], arr, i);
+		i++;
+	}
+	free(pid);
 	arr->redir = false;
 	part_seg_free(arr);
 }

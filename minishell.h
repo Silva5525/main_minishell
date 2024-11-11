@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:52:57 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/11 14:53:28 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/11 20:20:22 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void	free_ken_str(t_arr *arr, size_t i, size_t j);
 void	free_doller_question(char *first, char *last, char *stat_str, bool er);
 void	remove_redir_token(t_arr *arr, size_t i);
 void	ex_redir(t_arr **seg, t_arr *arr);
-void	do_fork(t_arr *arr);
+void	do_fork(t_arr *arr, pid_t *pid);
 char	*unclosed_quotes(char *line);
 bool	has_open_quotes(const char *line);
 void	envp_copy(t_arr *arr, char **envp, size_t i);
