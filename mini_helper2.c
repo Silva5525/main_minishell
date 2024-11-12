@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/16 20:44:12 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/04 15:11:21 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/12 14:58:43 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ char	**order_concate(t_arr *arr)
 		return (write(2, "Error, malloc in order_concate\n", 31), NULL);
 	while (j < arr->size)
 	{
-		str[j] = strip_quotes(arr->ken[j]->str[0]);
+		str[j] = strip_quotes(arr->ken[j]->str[0], 0, 0);
 		if (!str[j])
 		{
 			while (j > 0)

@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 14:52:57 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/11 20:20:22 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/12 15:06:42 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void	command_not_found(t_arr *arr);
 
 /// @param built/b_echo.c
 
-char	*strip_quotes(const char *str);
+char	*strip_quotes(const char *str, size_t i, size_t j);
 
 /// @param built/ft_arr_setenv.c
 
@@ -171,6 +171,9 @@ bool	seg_pipe(t_arr **segments, size_t *seg_count, t_arr *arr);
 void	create_new_seg(t_arr **seg, t_arr *arr, size_t seg_count);
 int		count_seg_for_ken(t_to **ken);
 int		p_r(const char *str);
-char	*status_check(t_arr *arr, char *pwd);
+int		update_quote_state(char c, int state);
+bool	is_outside_quotes(int state);
+char	*doller_search(char *str, char *hold, char **envp, char *out);
+bool	len_read(char *read);
 
 #endif

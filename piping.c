@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/13 14:02:37 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/11 20:44:09 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/12 14:50:45 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ void	statuss_pid(pid_t pid, t_arr *arr, size_t i)
 	int		stat;
 
 	i = 0;
-	// printf("pid: %d\n", pid); // debug 
 	waitpid(pid, &stat, 0);
 	if (WIFEXITED(stat))
 		arr->stat = WEXITSTATUS(stat);
@@ -75,24 +74,8 @@ void	statuss_pid(pid_t pid, t_arr *arr, size_t i)
 	}
 }
 
-/// @brief handles the command execution. If its a builtin command it will be
-/// executed there if not it will be executed in do_fork.
-/// @param seg the array of segments.
-/// @param arr the main minishell struct.
-void	ex_redir(t_arr **seg, t_arr *arr)
+void	ex_redir_helper(t_arr **seg, t_arr *arr, pid_t *pid, size_t i)
 {
-	size_t	i;
-	pid_t	*pid;
-
-	if (!seg || !seg[0])
-		return ;
-	i = 0;
-	pid = malloc(sizeof(pid_t) * (arr->seg_count + 1));
-	if (arr->size == 0)
-	{
-		part_seg_free(arr);
-		return ;
-	}
 	while (i < arr->seg_count + 1)
 	{
 		if (arr->seg_count == 0 && arr->redir == false)
@@ -117,6 +100,27 @@ void	ex_redir(t_arr **seg, t_arr *arr)
 		statuss_pid(pid[i], arr, i);
 		i++;
 	}
+}
+
+/// @brief handles the command execution. If its a builtin command it will be
+/// executed there if not it will be executed in do_fork.
+/// @param seg the array of segments.
+/// @param arr the main minishell struct.
+void	ex_redir(t_arr **seg, t_arr *arr)
+{
+	size_t	i;
+	pid_t	*pid;
+
+	if (!seg || !seg[0])
+		return ;
+	i = 0;
+	pid = malloc(sizeof(pid_t) * (arr->seg_count + 1));
+	if (arr->size == 0)
+	{
+		part_seg_free(arr);
+		return ;
+	}
+	ex_redir_helper(seg, arr, pid, i);
 	free(pid);
 	arr->redir = false;
 	part_seg_free(arr);

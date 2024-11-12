@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/19 16:42:54 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/11 09:59:22 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/12 14:42:54 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static void	while_search(char **search, char *safe)
 /// @param envp environment array
 /// @param out the expanded string
 /// @return hold or NULL if an error occurred
-static char	*doller_search(char *str, char *hold, char **envp, char *out)
+char	*doller_search(char *str, char *hold, char **envp, char *out)
 {
 	char	*doller;
 	char	*search;
@@ -102,41 +102,5 @@ static char	*doller_search(char *str, char *hold, char **envp, char *out)
 		str = search;
 		doller = ft_strchr(str, '$');
 	}
-	out = ft_strjoin(hold, str);
-	return (out);
-}
-
-/// @brief expands the environment variables in the read string
-/// if the string contains a $ followed by a valid variable name
-/// the variable will be replaced with its value.
-/// @param read the string to expand
-/// @param envp environment array
-/// @return the expanded string out, or NULL if an error occurred
-char	*expanding_env(char *read, char **envp, t_arr *arr)
-{
-	char	*hold;
-	char	*out;
-	char	*out2;
-	char	*str;
-	char	*doller_quest;
-
-	if (!read)
-		return (NULL);
-	str = read;
-	hold = ft_strdup("");
-	if (!hold)
-		return (NULL);
-	doller_quest = ft_strstr(str, "$?");
-	if (doller_quest)
-		return (free(hold), doller_question(str, arr->stat));
-	out = doller_search(str, hold, envp, NULL);
-	if (!out)
-		return (free(hold), NULL);
-	if (ft_strncmp(str, out, ft_strlen(str)) == 0)
-		return (out);
-	out2 = ft_strjoin(out, str);
-	free(out);
-	if (!out2)
-		return (NULL);
-	return (out2);
+	return (hold);
 }

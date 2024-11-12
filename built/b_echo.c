@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 14:06:40 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/11 14:55:15 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/12 15:03:05 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,24 +37,24 @@ bool	minus_newline(bool minus_nl, size_t *i, t_arr *arr)
 /// @brief strips the quotes from the string
 /// @param str the string to strip the quotes from
 /// @return the string without the quotes
-char	*strip_quotes(const char *str)
+char	*strip_quotes(const char *str, size_t i, size_t j)
 {
 	size_t	len;
 	char	*new_str;
-	size_t	i;
-	size_t	j;
+	int		state;
 
+	state = 0;
 	if (!str)
 		return (NULL);
-	i = 0;
-	j = 0;
 	len = strlen(str);
 	new_str = (char *)malloc(len + 1);
 	if (!new_str)
 		return (NULL);
 	while (str[i])
 	{
-		if (str[i] != '\'' && str[i] != '\"')
+		state = update_quote_state(str[i], state);
+		if (is_outside_quotes(state) || (state == 1 && str[i] != '\'')
+			|| (state == 2 && str[i] != '\"'))
 			new_str[j++] = str[i];
 		i++;
 	}
@@ -77,7 +77,7 @@ int	echo_helper(char *joined_str, char *hold, bool minus_nl)
 	if (!hold)
 		return (write(2, "Error, unclosed_quotes in echo_helper\n", 38),
 			EXIT_FAILURE);
-	hold = strip_quotes(joined_str);
+	hold = strip_quotes(joined_str, 0, 0);
 	if (!hold)
 		return (write(2, "Error, strip_quotes in echo_helper\n", 35),
 			EXIT_FAILURE);
