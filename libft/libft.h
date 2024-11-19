@@ -6,7 +6,7 @@
 /*   By: wdegraf <wdegraf@student.42heilbronn.de    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/12 14:13:48 by wdegraf           #+#    #+#             */
-/*   Updated: 2024/11/04 19:02:42 by wdegraf          ###   ########.fr       */
+/*   Updated: 2024/11/19 13:12:31 by wdegraf          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@
 # include <stdarg.h>
 # include <unistd.h>
 # include <stdint.h>
+# include <math.h>
+# include <stdio.h>
 # include <stdbool.h>
 # include "get_next_line.h"
 
@@ -114,5 +116,7 @@ char	*ft_build_f_path(char *path, char *name);
 int		ft_isupper(int c);
 bool	ft_isnumeric(const char *str);
 void	ft_write_smite(void);
+double	ft_magnitude(double re, double im);
+void	print_real(double r, int width, int dec);
 
 #endif
